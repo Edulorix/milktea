@@ -1,149 +1,45 @@
+# 고도화된 기능 추가: 수정/삭제 기능 + 필터링 기능 포함 HTML 코드 버전 3
+html_v3 = """
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>밀크티 팀 스케줄</title>
+  <title>밀크티 팀 고도화 캘린더</title>
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f8ff;
       margin: 0;
-      padding: 1rem;
+      padding: 0;
+      background-color: #f9fbff;
     }
-    h2, h3 {
-      text-align: center;
-      color: #007acc;
-    }
-    .card {
-      max-width: 600px;
-      margin: auto;
-      background: #fff;
-      padding: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-    }
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.3rem;
-      font-weight: bold;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 0.5rem;
-      font-size: 1rem;
-      border: 1px solid #cce6ff;
-      border-radius: 8px;
-    }
-    button {
-      padding: 0.75rem;
-      width: 100%;
-      background-color: #007acc;
-      color: white;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #005fa3;
-    }
-    .delete-button {
-      background-color: #ff6666;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 2rem;
-    }
-    th, td {
-      border: 1px solid #cce6ff;
-      padding: 8px;
-      text-align: center;
-    }
-    th {
-      background-color: #eaf4ff;
-    }
-    .filter-bar {
-      margin: 1rem auto;
-      max-width: 600px;
-      display: flex;
-      justify-content: space-between;
-      gap: 0.5rem;
-    }
-    .week-view {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      max-width: 100%;
-      margin: 2rem auto;
-    }
-    .day-box {
-      background-color: #fff;
-      padding: 0.5rem;
+    #calendar {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 0 10px;
+      background: white;
       border-radius: 10px;
-      border: 1px solid #ccc;
-      min-height: 100px;
-      font-size: 0.9rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
-    .day-box h4 {
-      margin: 0 0 4px 0;
-      font-size: 0.9rem;
-      color: #007acc;
+    .controls {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
     }
   </style>
 </head>
 <body>
-  <h2>📅 밀크티 팀 스케줄 입력</h2>
-  <div class="card">
-    <div class="form-group">
-      <label for="member">팀원 이름</label>
-      <select id="member">
-        <option value="김민지(T)">김민지(T)</option>
-        <option value="함주현">함주현</option>
-        <option value="우인옥">우인옥</option>
-        <option value="김민정">김민정</option>
-        <option value="최형심">최형심</option>
-        <option value="조인자(T)">조인자(T)</option>
-        <option value="윤진숙">윤진숙</option>
-        <option value="김미경">김미경</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="date">날짜</label>
-      <input type="date" id="date">
-    </div>
-    <div class="form-group">
-      <label for="location">근무지</label>
-      <input type="text" id="location" placeholder="예: 송도교보">
-    </div>
-    <div class="form-group">
-      <label for="category">유형</label>
-      <select id="category">
-        <option value="서점">서점</option>
-        <option value="실내">실내</option>
-        <option value="유치원/어린이집">유치원/어린이집</option>
-        <option value="초등학교">초등학교</option>
-        <option value="행사">행사</option>
-        <option value="박람회">박람회</option>
-        <option value="휴무">휴무</option>
-        <option value="기타">기타</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="note">메모</label>
-      <textarea id="note"></textarea>
-    </div>
-    <button onclick="saveSchedule()">저장</button>
-  </div>
-
-  <div class="filter-bar">
-    <select id="filterMember">
-      <option value="">전체 보기</option>
+  <h2 style="text-align:center; color:#007acc; margin-top:1rem;">📅 밀크티 팀 고도화 캘린더</h2>
+  <div class="controls">
+    <label for="memberFilter">🔍 팀원 필터:</label>
+    <select id="memberFilter" onchange="filterEvents()">
+      <option value="">전체</option>
       <option value="김민지(T)">김민지(T)</option>
       <option value="함주현">함주현</option>
       <option value="우인옥">우인옥</option>
@@ -153,135 +49,93 @@
       <option value="윤진숙">윤진숙</option>
       <option value="김미경">김미경</option>
     </select>
-    <button onclick="clearAll()" class="delete-button">전체 삭제</button>
   </div>
+  <div id='calendar'></div>
 
-  <table id="scheduleTable">
-    <thead>
-      <tr>
-        <th>이름</th>
-        <th>날짜</th>
-        <th>근무지</th>
-        <th>유형</th>
-        <th>메모</th>
-        <th>삭제</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <h3>🗓️ 이번 주 달력</h3>
-  <div class="week-view" id="weekView"></div>
-
-  <h3>📊 유형별 요약</h3>
-  <div id="summary"></div>
-
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
   <script>
-    const scheduleKey = "milkteaSchedule";
+    const memberColors = {
+      "김민지(T)": "#FFB6C1",
+      "함주현": "#87CEFA",
+      "우인옥": "#98FB98",
+      "김민정": "#FFD700",
+      "최형심": "#FF69B4",
+      "조인자(T)": "#FFA07A",
+      "윤진숙": "#BA55D3",
+      "김미경": "#00CED1"
+    };
 
-    function saveSchedule() {
-      const entry = {
-        member: document.getElementById("member").value,
-        date: document.getElementById("date").value,
-        location: document.getElementById("location").value,
-        category: document.getElementById("category").value,
-        note: document.getElementById("note").value
-      };
-      const data = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
-      data.push(entry);
-      localStorage.setItem(scheduleKey, JSON.stringify(data));
-      renderTable();
-      renderSummary();
-      renderWeekView();
+    let calendar;
+    let allEvents = JSON.parse(localStorage.getItem("milkteaEvents") || "[]");
+
+    function saveToStorage(events) {
+      localStorage.setItem("milkteaEvents", JSON.stringify(events));
     }
 
-    function deleteEntry(index) {
-      const data = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
-      data.splice(index, 1);
-      localStorage.setItem(scheduleKey, JSON.stringify(data));
-      renderTable();
-      renderSummary();
-      renderWeekView();
+    function filterEvents() {
+      const selected = document.getElementById("memberFilter").value;
+      const filtered = selected ? allEvents.filter(e => e.title.startsWith(selected)) : allEvents;
+      calendar.removeAllEvents();
+      calendar.addEventSource(filtered);
     }
 
-    function clearAll() {
-      if (confirm("정말 모든 데이터를 삭제하시겠습니까?")) {
-        localStorage.removeItem(scheduleKey);
-        renderTable();
-        renderSummary();
-        renderWeekView();
-      }
-    }
-
-    function renderTable() {
-      const tbody = document.querySelector("#scheduleTable tbody");
-      const filter = document.getElementById("filterMember").value;
-      const data = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
-      tbody.innerHTML = "";
-      data.forEach((item, index) => {
-        if (!filter || item.member === filter) {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${item.member}</td>
-            <td>${item.date}</td>
-            <td>${item.location}</td>
-            <td>${item.category}</td>
-            <td>${item.note}</td>
-            <td><button class="delete-button" onclick="deleteEntry(${index})">삭제</button></td>
-          `;
-          tbody.appendChild(row);
+    document.addEventListener('DOMContentLoaded', function() {
+      const calendarEl = document.getElementById('calendar');
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'ko',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,listWeek'
+        },
+        selectable: true,
+        editable: true,
+        events: allEvents,
+        dateClick: function(info) {
+          const date = info.dateStr;
+          const title = prompt(date + ' 일정 제목:');
+          if (!title) return;
+          const member = prompt('팀원 이름 입력 (예: 김민지(T)):');
+          if (!member) return;
+          const color = memberColors[member] || '#CCCCCC';
+          const event = {
+            title: member + ' - ' + title,
+            start: date,
+            allDay: true,
+            backgroundColor: color,
+            borderColor: color
+          };
+          calendar.addEvent(event);
+          allEvents.push(event);
+          saveToStorage(allEvents);
+        },
+        eventClick: function(info) {
+          const choice = prompt("수정하려면 새 제목을 입력하고, 삭제하려면 '삭제'를 입력하세요:", info.event.title);
+          if (choice === null) return;
+          if (choice === '삭제') {
+            info.event.remove();
+            allEvents = allEvents.filter(e => !(e.title === info.event.title && e.start === info.event.startStr));
+            saveToStorage(allEvents);
+          } else {
+            const oldTitle = info.event.title;
+            info.event.setProp('title', choice);
+            const eventObj = allEvents.find(e => e.title === oldTitle && e.start === info.event.startStr);
+            if (eventObj) eventObj.title = choice;
+            saveToStorage(allEvents);
+          }
         }
       });
-    }
-
-    function renderSummary() {
-      const data = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
-      const summary = {};
-      data.forEach(item => {
-        summary[item.category] = (summary[item.category] || 0) + 1;
-      });
-      const summaryDiv = document.getElementById("summary");
-      summaryDiv.innerHTML = Object.entries(summary)
-        .map(([key, val]) => `<p><strong>${key}</strong>: ${val}회</p>`)
-        .join("");
-    }
-
-    function getWeekDates() {
-      const today = new Date();
-      const start = new Date(today.setDate(today.getDate() - today.getDay() + 1));
-      const dates = [];
-      for (let i = 0; i < 7; i++) {
-        const d = new Date(start);
-        d.setDate(start.getDate() + i);
-        dates.push(d);
-      }
-      return dates;
-    }
-
-    function renderWeekView() {
-      const container = document.getElementById("weekView");
-      const data = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
-      const dates = getWeekDates();
-      const weekdays = ['월','화','수','목','금','토','일'];
-      container.innerHTML = "";
-      dates.forEach((date, i) => {
-        const dateStr = date.toISOString().split('T')[0];
-        const filtered = data.filter(item => item.date === dateStr);
-        const box = document.createElement("div");
-        box.className = "day-box";
-        box.innerHTML = `<h4>${weekdays[i]}<br>${dateStr}</h4>` +
-          filtered.map(item => `<div>${item.member} - ${item.location}</div>`).join("");
-        container.appendChild(box);
-      });
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("date").value = new Date().toISOString().split('T')[0];
-      document.getElementById("filterMember").addEventListener("change", renderTable);
-      renderTable();
-      renderSummary();
-      renderWeekView();
+      calendar.render();
     });
   </script>
 </body>
 </html>
+"""
+
+# 저장
+html_v3_path = "/mnt/data/milktea_calendar_v3.html"
+with open(html_v3_path, "w", encoding="utf-8") as f:
+    f.write(html_v3)
+
+html_v3_path
