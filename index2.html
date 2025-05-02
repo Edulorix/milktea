@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>‥화보 마일 마일 - 미르크테이 팀원 스컷 관리</title>
+  <style>
+    :root {
+      --primary: #007acc;
+      --light-blue: #f0f8ff;
+      --border: #cce6ff;
+      --danger: #ff6666;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--light-blue);
+      margin: 0;
+      padding: 1rem;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 0.75rem;
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: #444;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+
+    input[type="text"], input[type="date"], select, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    .delete-button {
+      background-color: var(--danger);
+      margin-top: 0.5rem;
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .card {
+        max-width: 600px;
+        margin: 0 auto 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>팀원 스컷 관리</h2>
+
+  <div class="card">
+    <h3>팀원 스케줄 입력</h3>
+    <div class="form-group">
+      <label for="member">팀원 이름</label>
+      <input type="text" id="member" placeholder="예: 김민지" />
+    </div>
+    <div class="form-group">
+      <label for="date">날짜</label>
+      <input type="date" id="date" />
+    </div>
+    <div class="form-group">
+      <label for="location">근무지 / 행사</label>
+      <input type="text" id="location" placeholder="예: 송도교보" />
+    </div>
+    <div class="form-group">
+      <label for="category">유형</label>
+      <select id="category">
+        <option>유치원</option>
+        <option>초등학교</option>
+        <option>행사 / 박람회</option>
+        <option>기타</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="note">비고 / 메모</label>
+      <textarea id="note" rows="2" placeholder="특이사항 입력"></textarea>
+    </div>
+    <div class="row-actions">
+      <button onclick="saveSchedule()">확인 & 저장</button>
+      <button class="delete-button" onclick="clearForm()">삭제</button>
+    </div>
+  </div>
+
+  <script>
+    function saveSchedule() {
+      const data = {
+        name: document.getElementById("member").value,
+        date: document.getElementById("date").value,
+        location: document.getElementById("location").value,
+        category: document.getElementById("category").value,
+        note: document.getElementById("note").value
+      };
+      console.log("✅ 저장된 데이터:", data);
+      alert("스케줄이 저장되었습니다!");
+      clearForm();
+    }
+
+    function clearForm() {
+      document.getElementById("member").value = "";
+      document.getElementById("date").value = "";
+      document.getElementById("location").value = "";
+      document.getElementById("category").value = "유치원";
+      document.getElementById("note").value = "";
+    }
+  </script>
+</body>
+</html>
