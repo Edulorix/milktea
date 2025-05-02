@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>밀크티 팀 고도화 캘린더</title>
+  <title>밀크티 팀 스케쥴</title>
   <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
   <style>
     body {
@@ -30,10 +30,16 @@
       border-radius: 8px;
       border: 1px solid #ccc;
     }
+    #vacationSummary {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+      font-size: 0.95rem;
+    }
   </style>
 </head>
 <body>
-  <h2 style="text-align:center; color:#007acc; margin-top:1rem;">📅 밀크티 팀 고도화 캘린더</h2>
+  <h2 style="text-align:center; color:#007acc; margin-top:1rem;">📅 밀크티 팀 스케쥴</h2>
   <div class="controls">
     <label for="memberFilter">🔍 팀원 필터:</label>
     <select id="memberFilter" onchange="filterEvents()">
@@ -49,6 +55,7 @@
     </select>
   </div>
   <div id='calendar'></div>
+  <div id="vacationSummary"></div>
 
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
   <script>
@@ -63,6 +70,17 @@
       "김미경": "#00CED1"
     };
 
+    const koreaHolidays = {
+      "2025-01-01": "신정",
+      "2025-03-01": "삼일절",
+      "2025-05-05": "어린이날",
+      "2025-06-06": "현충일",
+      "2025-08-15": "광복절",
+      "2025-10-03": "개천절",
+      "2025-10-09": "한글날",
+      "2025-12-25": "성탄절"
+    };
+
     let calendar;
     let allEvents = JSON.parse(localStorage.getItem("milkteaEvents") || "[]");
 
@@ -74,7 +92,35 @@
       const selected = document.getElementById("memberFilter").value;
       const filtered = selected ? allEvents.filter(e => e.title.startsWith(selected)) : allEvents;
       calendar.removeAllEvents();
-      calendar.addEventSource(filtered);
+      calendar.addEventSource([...filtered, ...getHolidayEvents()]);
+      updateVacationSummary(filtered);
+    }
+
+    function updateVacationSummary(events) {
+      const summary = {};
+      const now = new Date();
+      const thisMonth = now.toISOString().slice(0, 7);
+      events.forEach(e => {
+        if (e.category === "휴무" || e.title.includes("휴무")) {
+          if (e.start.startsWith(thisMonth)) {
+            const name = e.title.split(" - ")[0];
+            summary[name] = (summary[name] || 0) + 1;
+          }
+        }
+      });
+      const summaryDiv = document.getElementById("vacationSummary");
+      summaryDiv.innerHTML = "<h4>🛌 이번달 휴무 횟수</h4>" + Object.entries(summary)
+        .map(([k, v]) => `<div>${k}: ${v}회</div>`).join("");
+    }
+
+    function getHolidayEvents() {
+      return Object.entries(koreaHolidays).map(([date, name]) => ({
+        title: "🇰🇷 " + name,
+        start: date,
+        allDay: true,
+        display: 'background',
+        backgroundColor: '#ffe4e1'
+      }));
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -89,14 +135,17 @@
         },
         selectable: true,
         editable: true,
-        events: allEvents,
+        events: [...allEvents, ...getHolidayEvents()],
         dateClick: function(info) {
           const date = info.dateStr;
-          const title = prompt(date + ' 일정 제목:');
-          if (!title) return;
           const member = prompt('팀원 이름 입력 (예: 김민지(T)):');
           if (!member) return;
+          const title = prompt(date + ' 일정 제목:');
+          if (!title) return;
           const color = memberColors[member] || '#CCCCCC';
+          const action = confirm("일정을 저장하시겠습니까?");
+          if (!action) return;
+
           const event = {
             title: member + ' - ' + title,
             start: date,
@@ -107,6 +156,7 @@
           calendar.addEvent(event);
           allEvents.push(event);
           saveToStorage(allEvents);
+          updateVacationSummary(allEvents);
         },
         eventClick: function(info) {
           const choice = prompt("수정하려면 새 제목을 입력하고, 삭제하려면 '삭제'를 입력하세요:", info.event.title);
@@ -115,6 +165,7 @@
             info.event.remove();
             allEvents = allEvents.filter(e => !(e.title === info.event.title && e.start === info.event.startStr));
             saveToStorage(allEvents);
+            updateVacationSummary(allEvents);
           } else {
             const oldTitle = info.event.title;
             info.event.setProp('title', choice);
@@ -125,6 +176,7 @@
         }
       });
       calendar.render();
+      updateVacationSummary(allEvents);
     });
   </script>
 </body>
