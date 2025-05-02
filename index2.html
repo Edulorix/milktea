@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>‥화보 마일 마일 - 미르크테이 팀원 스컷 관리</title>
+  <title>밀크티 팀 스케줄 - 모바일 폼 + 전체 보기</title>
   <style>
     :root {
       --primary: #007acc;
@@ -12,24 +12,17 @@
       --danger: #ff6666;
       --radius: 12px;
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: var(--light-blue);
-      margin: 0;
-      padding: 1rem;
+      margin: 0; padding: 1rem;
     }
-
-    h2 {
+    h2, h3 {
       text-align: center;
       color: var(--primary);
       margin-bottom: 1rem;
     }
-
     .card {
       background: #fff;
       border-radius: var(--radius);
@@ -37,35 +30,16 @@
       padding: 1rem;
       margin-bottom: 1rem;
     }
-
-    .card h3 {
-      margin: 0 0 0.5rem;
-      font-size: 1.1rem;
-      color: #333;
-    }
-
-    .form-group {
-      margin-bottom: 0.75rem;
-    }
-
-    label {
-      font-size: 0.85rem;
-      color: #444;
-      margin-bottom: 0.3rem;
-      display: block;
-    }
-
+    .form-group { margin-bottom: 0.75rem; }
+    label { font-size: 0.85rem; color: #444; margin-bottom: 0.3rem; display: block; }
     input[type="text"], input[type="date"], select, textarea {
-      width: 100%;
-      padding: 0.5rem;
+      width: 100%; padding: 0.5rem;
       border-radius: var(--radius);
       border: 1px solid var(--border);
       font-size: 1rem;
     }
-
     button {
-      width: 100%;
-      padding: 0.75rem;
+      width: 100%; padding: 0.75rem;
       background-color: var(--primary);
       color: white;
       border: none;
@@ -73,35 +47,34 @@
       font-size: 1rem;
       cursor: pointer;
     }
-
-    button:hover {
-      background-color: #005fa3;
-    }
-
+    button:hover { background-color: #005fa3; }
     .delete-button {
       background-color: var(--danger);
       margin-top: 0.5rem;
     }
-
-    .row-actions {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 1rem;
+    .row-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 2rem;
     }
-
+    th, td {
+      border: 1px solid var(--border);
+      padding: 6px;
+      text-align: center;
+    }
+    th { background: #eaf4ff; }
+    td[data-type="유치원"] { background: #e0f7fa; }
+    td[data-type="행사"] { background: #fff9c4; }
+    td[data-type="휴무"] { background: #eeeeee; }
     @media (min-width: 768px) {
-      .card {
-        max-width: 600px;
-        margin: 0 auto 1rem;
-      }
+      .card { max-width: 600px; margin: 0 auto 1rem; }
     }
   </style>
 </head>
 <body>
-  <h2>팀원 스컷 관리</h2>
-
+  <h2>팀원 스케줄 입력</h2>
   <div class="card">
-    <h3>팀원 스케줄 입력</h3>
     <div class="form-group">
       <label for="member">팀원 이름</label>
       <input type="text" id="member" placeholder="예: 김민지" />
@@ -117,15 +90,15 @@
     <div class="form-group">
       <label for="category">유형</label>
       <select id="category">
-        <option>유치원</option>
-        <option>초등학교</option>
-        <option>행사 / 박람회</option>
-        <option>기타</option>
+        <option value="유치원">유치원</option>
+        <option value="초등학교">초등학교</option>
+        <option value="행사">행사</option>
+        <option value="휴무">휴무</option>
       </select>
     </div>
     <div class="form-group">
       <label for="note">비고 / 메모</label>
-      <textarea id="note" rows="2" placeholder="특이사항 입력"></textarea>
+      <textarea id="note" rows="2"></textarea>
     </div>
     <div class="row-actions">
       <button onclick="saveSchedule()">확인 & 저장</button>
@@ -133,20 +106,34 @@
     </div>
   </div>
 
+  <h3>> 전체 스케줄 보기</h3>
+  <table id="scheduleTable">
+    <thead>
+      <tr><th>이름</th><th>날짜</th><th>근무지</th><th>유형</th><th>비고</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
   <script>
+    const table = document.querySelector("#scheduleTable tbody");
     function saveSchedule() {
-      const data = {
-        name: document.getElementById("member").value,
-        date: document.getElementById("date").value,
-        location: document.getElementById("location").value,
-        category: document.getElementById("category").value,
-        note: document.getElementById("note").value
-      };
-      console.log("✅ 저장된 데이터:", data);
-      alert("스케줄이 저장되었습니다!");
+      const name = document.getElementById("member").value;
+      const date = document.getElementById("date").value;
+      const location = document.getElementById("location").value;
+      const category = document.getElementById("category").value;
+      const note = document.getElementById("note").value;
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${name}</td>
+        <td>${date}</td>
+        <td>${location}</td>
+        <td data-type="${category}">${category}</td>
+        <td>${note}</td>
+      `;
+      table.appendChild(row);
       clearForm();
     }
-
     function clearForm() {
       document.getElementById("member").value = "";
       document.getElementById("date").value = "";
