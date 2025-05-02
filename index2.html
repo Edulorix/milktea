@@ -2,108 +2,104 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>밀크티 팀 스케줄 - 모바일 폼 + 전체 보기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>밀크티 팀 스케줄</title>
   <style>
-    :root {
-      --primary: #007acc;
-      --light-blue: #f0f8ff;
-      --border: #cce6ff;
-      --danger: #ff6666;
-      --radius: 12px;
-    }
-    * { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: var(--light-blue);
-      margin: 0; padding: 1rem;
+      background-color: #f0f8ff;
+      margin: 0;
+      padding: 1rem;
     }
     h2, h3 {
       text-align: center;
-      color: var(--primary);
-      margin-bottom: 1rem;
+      color: #007acc;
     }
     .card {
+      max-width: 600px;
+      margin: auto;
       background: #fff;
-      border-radius: var(--radius);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    .form-group {
       margin-bottom: 1rem;
     }
-    .form-group { margin-bottom: 0.75rem; }
-    label { font-size: 0.85rem; color: #444; margin-bottom: 0.3rem; display: block; }
-    input[type="text"], input[type="date"], select, textarea {
-      width: 100%; padding: 0.5rem;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.5rem;
       font-size: 1rem;
+      border: 1px solid #cce6ff;
+      border-radius: 8px;
     }
     button {
-      width: 100%; padding: 0.75rem;
-      background-color: var(--primary);
+      padding: 0.75rem;
+      width: 100%;
+      background-color: #007acc;
       color: white;
-      border: none;
-      border-radius: var(--radius);
       font-size: 1rem;
-      cursor: pointer;
-    }
-    button:hover { background-color: #005fa3; }
-    .delete-button {
-      background-color: var(--danger);
-      color: white;
       border: none;
       border-radius: 8px;
-      padding: 4px 8px;
       cursor: pointer;
     }
-    .row-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+    button:hover {
+      background-color: #005fa3;
+    }
+    .delete-button {
+      background-color: #ff6666;
+    }
     table {
-      width: 100%; border-collapse: collapse;
-      font-size: 0.85rem;
+      width: 100%;
+      border-collapse: collapse;
       margin-top: 2rem;
     }
     th, td {
-      border: 1px solid var(--border);
-      padding: 6px;
+      border: 1px solid #cce6ff;
+      padding: 8px;
       text-align: center;
     }
-    th { background: #eaf4ff; }
-    td[data-type="유치원/어린이집"] { background: #e0f7fa; }
-    td[data-type="행사"] { background: #fff9c4; }
-    td[data-type="휴무"] { background: #eeeeee; }
-    td[data-type="서점"] { background: #ffebee; }
-    td[data-type="실내"] { background: #e8f5e9; }
-    td[data-type="초등학교"] { background: #ede7f6; }
-    td[data-type="박람회"] { background: #fff3e0; }
-    td[data-type="기타"] { background: #f3f3f3; }
-    @media (min-width: 768px) {
-      .card { max-width: 600px; margin: 0 auto 1rem; }
+    th {
+      background-color: #eaf4ff;
+    }
+    .filter-bar {
+      margin: 1rem auto;
+      max-width: 600px;
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
     }
   </style>
 </head>
 <body>
-  <h2>팀원 스케줄 입력</h2>
+  <h2>📅 밀크티 팀 스케줄 입력</h2>
   <div class="card">
     <div class="form-group">
       <label for="member">팀원 이름</label>
       <select id="member">
-  <option value="김민지(T)">김민지(T)</option>
-  <option value="함주현">함주현</option>
-  <option value="우인옥">우인옥</option>
-  <option value="김민정">김민정</option>
-  <option value="최형심">최형심</option>
-  <option value="조인자(T)">조인자(T)</option>
-  <option value="윤진숙">윤진숙</option>
-  <option value="김미경">김미경</option>
-</select>
+        <option value="김민지(T)">김민지(T)</option>
+        <option value="함주현">함주현</option>
+        <option value="우인옥">우인옥</option>
+        <option value="김민정">김민정</option>
+        <option value="최형심">최형심</option>
+        <option value="조인자(T)">조인자(T)</option>
+        <option value="윤진숙">윤진숙</option>
+        <option value="김미경">김미경</option>
+      </select>
     </div>
     <div class="form-group">
       <label for="date">날짜</label>
-      <input type="date" id="date" />
+      <input type="date" id="date">
     </div>
     <div class="form-group">
-      <label for="location">근무지 / 행사</label>
-      <input type="text" id="location" placeholder="예: 송도교보" />
+      <label for="location">근무지</label>
+      <input type="text" id="location" placeholder="예: 송도교보">
     </div>
     <div class="form-group">
       <label for="category">유형</label>
@@ -119,96 +115,116 @@
       </select>
     </div>
     <div class="form-group">
-      <label for="note">비고 / 메모</label>
-      <textarea id="note" rows="2"></textarea>
+      <label for="note">메모</label>
+      <textarea id="note"></textarea>
     </div>
-    <div class="row-actions">
-      <button onclick="saveSchedule()">확인 & 저장</button>
-      <button class="delete-button" onclick="clearForm()">삭제</button>
-    </div>
+    <button onclick="saveSchedule()">저장</button>
   </div>
 
-  <h3>> 전체 스케줄 보기</h3>
+  <div class="filter-bar">
+    <select id="filterMember">
+      <option value="">전체 보기</option>
+      <option value="김민지(T)">김민지(T)</option>
+      <option value="함주현">함주현</option>
+      <option value="우인옥">우인옥</option>
+      <option value="김민정">김민정</option>
+      <option value="최형심">최형심</option>
+      <option value="조인자(T)">조인자(T)</option>
+      <option value="윤진숙">윤진숙</option>
+      <option value="김미경">김미경</option>
+    </select>
+    <button onclick="clearAll()" class="delete-button">전체 삭제</button>
+  </div>
+
   <table id="scheduleTable">
     <thead>
-      <tr><th>이름</th><th>날짜</th><th>근무지</th><th>유형</th><th>비고</th><th>삭제</th></tr>
+      <tr>
+        <th>이름</th>
+        <th>날짜</th>
+        <th>근무지</th>
+        <th>유형</th>
+        <th>메모</th>
+        <th>삭제</th>
+      </tr>
     </thead>
     <tbody></tbody>
   </table>
 
-  <h3>> 유형별 요약</h3>
-  <div id="summaryContainer"></div>
+  <h3>📊 유형별 요약</h3>
+  <div id="summary"></div>
 
   <script>
-    const table = document.querySelector("#scheduleTable tbody");
-    const summaryContainer = document.getElementById("summaryContainer");
-    const scheduleKey = "milkteaScheduleData";
+    const scheduleKey = "milkteaSchedule";
 
     function saveSchedule() {
-      const name = document.getElementById("member").value;
-      const date = document.getElementById("date").value;
-      const location = document.getElementById("location").value;
-      const category = document.getElementById("category").value;
-      const note = document.getElementById("note").value;
-
-      const entry = { name, date, location, category, note };
-      const savedData = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
-      savedData.push(entry);
-      localStorage.setItem(scheduleKey, JSON.stringify(savedData));
-      refreshTable(savedData);
-      clearForm();
+      const entry = {
+        member: document.getElementById("member").value,
+        date: document.getElementById("date").value,
+        location: document.getElementById("location").value,
+        category: document.getElementById("category").value,
+        note: document.getElementById("note").value
+      };
+      const data = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
+      data.push(entry);
+      localStorage.setItem(scheduleKey, JSON.stringify(data));
+      renderTable();
+      renderSummary();
     }
 
     function deleteEntry(index) {
-      const savedData = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
-      savedData.splice(index, 1);
-      localStorage.setItem(scheduleKey, JSON.stringify(savedData));
-      refreshTable(savedData);
+      const data = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
+      data.splice(index, 1);
+      localStorage.setItem(scheduleKey, JSON.stringify(data));
+      renderTable();
+      renderSummary();
     }
 
-    function refreshTable(data) {
-      table.innerHTML = "";
-      data.forEach((entry, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${entry.name}</td>
-          <td>${entry.date}</td>
-          <td>${entry.location}</td>
-          <td data-type="${entry.category}">${entry.category}</td>
-          <td>${entry.note}</td>
-          <td><button class="delete-button" onclick="deleteEntry(${index})">삭제</button></td>
-        `;
-        table.appendChild(row);
+    function clearAll() {
+      if (confirm("정말 모든 데이터를 삭제하시겠습니까?")) {
+        localStorage.removeItem(scheduleKey);
+        renderTable();
+        renderSummary();
+      }
+    }
+
+    function renderTable() {
+      const tbody = document.querySelector("#scheduleTable tbody");
+      const filter = document.getElementById("filterMember").value;
+      const data = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
+      tbody.innerHTML = "";
+      data.forEach((item, index) => {
+        if (!filter || item.member === filter) {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${item.member}</td>
+            <td>${item.date}</td>
+            <td>${item.location}</td>
+            <td>${item.category}</td>
+            <td>${item.note}</td>
+            <td><button class="delete-button" onclick="deleteEntry(${index})">삭제</button></td>
+          `;
+          tbody.appendChild(row);
+        }
       });
-      updateSummary(data);
     }
 
-    function clearForm() {
-      document.getElementById("member").value = "";
-      document.getElementById("date").value = new Date().toISOString().split('T')[0];
-      document.getElementById("location").value = "";
-      document.getElementById("category").value = "서점";
-      document.getElementById("note").value = "";
-    }
-
-    function loadSavedSchedules() {
-      const savedData = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
-      refreshTable(savedData);
-    }
-
-    function updateSummary(data) {
+    function renderSummary() {
+      const data = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
       const summary = {};
-      data.forEach(entry => {
-        summary[entry.category] = (summary[entry.category] || 0) + 1;
+      data.forEach(item => {
+        summary[item.category] = (summary[item.category] || 0) + 1;
       });
-      summaryContainer.innerHTML = Object.entries(summary).map(
-        ([category, count]) => `<p><strong>${category}</strong>: ${count}회</p>`
-      ).join("");
+      const summaryDiv = document.getElementById("summary");
+      summaryDiv.innerHTML = Object.entries(summary)
+        .map(([key, val]) => `<p><strong>${key}</strong>: ${val}회</p>`)
+        .join("");
     }
 
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("date").value = new Date().toISOString().split('T')[0];
-      loadSavedSchedules();
+      document.getElementById("filterMember").addEventListener("change", renderTable);
+      renderTable();
+      renderSummary();
     });
   </script>
 </body>
