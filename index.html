@@ -3,69 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=no">
-  <title>밀크티 스케줄 뷰어</title>
-  <meta name="description" content="교육 홍보 교사 팀의 월간 스케줄을 모바일에서 직관적으로 확인할 수 있는 앱입니다.">
+  <title>밀크티-스케쥴 관리</title>
   <meta name="theme-color" content="#f0f8ff">
-  <!-- PWA용 메타 -->
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon-192.png">
   <style>
     :root {
       --main-bg: #f0f8ff;
       --primary: #2196f3;
-      --holiday: #ffecec;
-      --card-radius: 10px;
+      --card-radius: 12px;
       --card-border: #b6e0ff;
-      --box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      --box-shadow: 0 2px 7px rgba(0,0,0,0.07);
       --font: Arial, 'Pretendard', 'Noto Sans KR', sans-serif;
+      --holiday: #ffecec;
       --gray: #e0e0e0;
-      /* 팀원별 색상 */
-      --color-김민지: #b3e5fc;
-      --color-우인옥: #fff9c4;
-      --color-함주현: #ffe0b2;
-      --color-김민정: #d1c4e9;
-      --color-최형심: #c8e6c9;
-      --color-조인자: #ffccbc;
-      --color-유지수: #f8bbd0;
-      --color-윤진숙: #ffd180;
-      --color-원경희: #b2dfdb;
-      --color-김미경: #f0f4c3;
-      --color-김선애: #f5e1fc;
-      --color-어현미: #ffecb3;
-      --color-안세진: #e6ee9c;
+      --color-김민지: #b3e5fc; --color-우인옥: #fff9c4; --color-함주현: #ffe0b2;
+      --color-김민정: #d1c4e9; --color-최형심: #c8e6c9; --color-조인자: #ffccbc;
+      --color-유지수: #f8bbd0; --color-윤진숙: #ffd180; --color-원경희: #b2dfdb;
+      --color-김미경: #f0f4c3; --color-김선애: #f5e1fc; --color-어현미: #ffecb3; --color-안세진: #e6ee9c;
       --default: #e3f2fd;
     }
     body {
-      background:var(--main-bg);
-      font-family:var(--font);
-      margin:0; padding-bottom:70px;
-      color:#222;
+      background:var(--main-bg); font-family:var(--font); margin:0; color:#222;
+      padding-bottom:68px;
     }
     header {
-      background:var(--primary);
-      color:#fff;
-      padding:1.1em 0.8em 0.7em 0.8em;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      border-radius:0 0 1.3em 1.3em;
-      box-shadow:0 2px 12px #90caf9aa;
+      background:var(--primary); color:#fff; padding:1.2em 0.8em 0.8em 0.8em;
+      border-radius:0 0 1.3em 1.3em; box-shadow:0 2px 12px #90caf9aa;
+      text-align:center;
     }
-    .header-title { font-size:1.25em; font-weight:700; letter-spacing:0.04em; }
-    .filter-tabs {
-      display:flex; gap:0.45em; margin:0.7em 0 0.2em 0;
-      width:100%; justify-content:center;
+    .header-title { font-size:1.22em; font-weight:700; letter-spacing:0.04em; }
+    .tabbar {
+      display:flex; gap:0.35em; justify-content:center; margin:1em 0 0.5em 0;
     }
-    .filter-tabs button, .mypage-btn {
+    .tabbar button {
       background:var(--main-bg); color:var(--primary); border:none;
       border-radius:0.7em; font-size:1.01em; font-weight:600; cursor:pointer;
-      padding:0.44em 1.1em; margin-right:0.15em; transition:.1s;
+      padding:0.44em 1.1em; margin-right:0.1em; transition:.1s;
     }
-    .filter-tabs .active, .mypage-btn.active { background:var(--primary); color:#fff; }
-    .weekday-filter { display:flex; gap:0.3em; justify-content:center; margin:0.3em 0 0.7em 0;}
-    .weekday-filter button {
+    .tabbar .active { background:var(--primary); color:#fff; }
+    .weekdaybar { display:flex; gap:0.3em; justify-content:center; margin:0.3em 0 0.7em 0;}
+    .weekdaybar button {
       background:var(--main-bg); color:var(--primary); border:none; border-radius:0.5em;
       font-size:1em; font-weight:500; cursor:pointer; padding:0.32em 0.85em;
     }
-    .weekday-filter .active { background:var(--primary); color:#fff; }
+    .weekdaybar .active { background:var(--primary); color:#fff; }
     .searchbar {
       display:flex; gap:0.6em; margin:0.7em 0 0.7em 0; justify-content:center;
       align-items: center;
@@ -85,37 +65,36 @@
       border: 2px solid var(--card-border);
       box-shadow:var(--box-shadow);
       padding:16px 14px 12px 14px;
-      display:flex; flex-direction:column; gap:0.18em; min-width:0;
+      display:flex; flex-direction:column; gap:0.19em; min-width:0; position:relative;
       background: var(--default);
-      position:relative;
-      transition:.14s;
       margin-bottom:2px;
+      transition:.14s;
     }
     .card.holiday { background:var(--holiday);}
     .card.completed { opacity: 0.6; background:var(--gray);}
     .card .colorbar {
       position:absolute; left:0; top:0; bottom:0; width:0.7em; border-radius:var(--card-radius) 0 0 var(--card-radius);
     }
-    .card h3 { font-size:1.11em; font-weight:700; margin:0 0 0.2em 0;}
-    .card .date {font-size:0.98em; color:#1e88e5; font-weight:500;}
-    .card .place {font-size:1em; color:#3949ab; font-weight:600; margin-bottom:0.08em;}
-    .card .type-tag {display:inline-block;padding:0.1em 0.6em; border-radius:0.6em; font-size:0.9em; margin-left:0.5em; background:#bbdefb; color:#1565c0;}
+    .card h3 { font-size:1.12em; font-weight:700; margin:0 0 0.15em 0;}
+    .card .date {font-size:0.99em; color:#1e88e5; font-weight:500;}
+    .card .place {font-size:1em; color:#3949ab; font-weight:600; margin-bottom:0.07em;}
+    .card .tags { margin:0.03em 0 0.25em 0; }
+    .type-tag {display:inline-block;padding:0.08em 0.6em; border-radius:0.6em; font-size:0.91em; margin-right:0.2em; background:#bbdefb; color:#1565c0;}
+    .off-tag { background:#ffe082; color:#f57c00; }
     .card .memo {margin:0.17em 0 0.07em 0; font-size:0.93em; color:#607d8b; background:#f0f4c3; border-radius:0.5em; padding:0.09em 0.7em;}
-    .card .holiday-label { color:#e57373; font-size:0.98em; margin-left:0.54em; font-weight:600;}
+    .card .holiday-label { color:#e57373; font-size:0.99em; margin-left:0.54em; font-weight:600;}
     .card input[type="number"] { width:4em; border-radius:0.6em; border:1px solid #bbdefb; background:#fff; padding:0.21em 0.4em;}
     .card label { font-size:0.95em; color:#555; margin-right:0.6em;}
     .card textarea {
       border-radius:0.6em; border:1px solid #bbdefb; font-size:1em;
-      padding:0.23em 0.7em; width:96%; min-height:1.7em; resize:vertical;
-      margin-top:0.18em;
-      background:#fff;
+      padding:0.23em 0.7em; width:96%; min-height:1.8em; resize:vertical;
+      margin-top:0.18em; background:#fff;
     }
     .fixed-footer {
       position:fixed; left:0; bottom:0; width:100vw; background:#fff;
       box-shadow:0 -2px 14px #90caf955;
       display:flex; justify-content:space-around; align-items:center;
-      z-index:1001; height:58px;
-      border-radius:1.2em 1.2em 0 0;
+      z-index:1001; height:58px; border-radius:1.2em 1.2em 0 0;
     }
     .fixed-footer button {
       background:var(--primary); color:#fff; border:none;
@@ -145,13 +124,13 @@
 </head>
 <body>
   <header>
-    <div class="header-title">밀크티 스케줄 뷰어</div>
-    <div class="filter-tabs" id="dateFilter">
+    <div class="header-title">밀크티-스케쥴 관리</div>
+    <div class="tabbar" id="dateFilter">
       <button onclick="setRange('week')" id="tab-week">주간</button>
       <button onclick="setRange('month')" id="tab-month">월간</button>
       <button class="mypage-btn" onclick="toggleMyPage()" id="mypageBtn">마이페이지</button>
     </div>
-    <div class="weekday-filter" id="weekdayFilter"></div>
+    <div class="weekdaybar" id="weekdayFilter"></div>
   </header>
   <div class="searchbar">
     <input type="text" id="search" placeholder="이름 또는 근무지 검색" oninput="renderCards()">
@@ -159,7 +138,6 @@
   </div>
   <div class="month-off-summary" id="monthOffSummary"></div>
   <div class="schedule-list" id="scheduleList"></div>
-
   <div class="summary-view" id="summaryView" style="display:none;"></div>
   <div class="fixed-footer">
     <button onclick="savePDF()"><span>PDF 저장</span></button>
@@ -167,7 +145,7 @@
     <button onclick="showSummary()"><span>요약 보기</span></button>
   </div>
   <script>
-    // ---------------- 기본 데이터/팀원별 색상 ----------------
+    // 팀원별 색상
     const memberColors = {
       "김민지": "var(--color-김민지)", "우인옥": "var(--color-우인옥)", "함주현":"var(--color-함주현)",
       "김민정":"var(--color-김민정)", "최형심":"var(--color-최형심)", "조인자":"var(--color-조인자)",
@@ -175,24 +153,20 @@
       "김미경":"var(--color-김미경)", "김선애":"var(--color-김선애)", "어현미":"var(--color-어현미)", "안세진":"var(--color-안세진)"
     };
     let schedule = [];
-    let loadedFromJSON = false;
-    // 공휴일(2025) 데이터
     const holidays2025 = {
       "2025-01-01":"신정", "2025-02-27":"설연휴", "2025-02-28":"설날", "2025-03-01":"삼일절",
       "2025-03-29":"부처님오신날", "2025-05-01":"근로자의날", "2025-05-05":"어린이날", "2025-05-06":"대체공휴일",
       "2025-06-06":"현충일", "2025-08-15":"광복절", "2025-09-06":"추석연휴", "2025-09-07":"추석",
       "2025-09-08":"추석연휴", "2025-10-03":"개천절", "2025-10-09":"한글날", "2025-12-25":"성탄절"
     };
-    // ---------------- 날짜 필터 등 상태 ----------------
     let rangeType = localStorage.getItem('rangeType') || 'month'; // 'week' or 'month'
     let filterWeekday = ""; // 0~6 or ""
     let mypage = false;
     let myName = localStorage.getItem('myName') || "";
-    // ---------------- 초기 데이터 로딩 ----------------
+    // 데이터 로딩: localStorage>schedule.json>샘플
     function loadData() {
       if(localStorage.getItem('schedule')) {
         schedule = JSON.parse(localStorage.getItem('schedule'));
-        loadedFromJSON = false;
         renderCards();
         return;
       }
@@ -200,34 +174,21 @@
         .then(r=>r.ok?r.json():[])
         .then(json=>{
           schedule = json.map((row,i)=>({...row, id:row.id||Date.now()+i}));
-          loadedFromJSON = true;
           saveData();
           renderCards();
         })
-        .catch(()=>{ schedule=[]; renderCards(); });
+        .catch(()=>{
+          // 샘플
+          schedule = [
+            { name:"김민지", date:"2025-05-01", place:"인천영풍", type:"서점", memo:"", dbCount:0, attended:false },
+            { name:"우인옥", date:"2025-05-01", place:"송도교보", type:"서점", memo:"유치원 병행", dbCount:3, attended:true }
+          ]; saveData(); renderCards();
+        });
     }
     function saveData() {
       localStorage.setItem('schedule', JSON.stringify(schedule));
     }
-    // ---------------- 날짜, 요일, 월 유틸 ----------------
-    function getToday() { return (new Date()).toISOString().slice(0,10);}
-    function getWeekRange() {
-      const today = new Date();
-      const day = today.getDay()||7;
-      const monday = new Date(today); monday.setDate(today.getDate()-day+1);
-      const sunday = new Date(monday); sunday.setDate(monday.getDate()+6);
-      return [monday.toISOString().slice(0,10), sunday.toISOString().slice(0,10)];
-    }
-    function getMonthRange() {
-      const today = new Date();
-      const first = new Date(today.getFullYear(),today.getMonth(),1);
-      const last = new Date(today.getFullYear(),today.getMonth()+1,0);
-      return [first.toISOString().slice(0,10), last.toISOString().slice(0,10)];
-    }
-    function getWeekdayStr(d) {
-      return ["일","월","화","수","목","금","토"][d];
-    }
-    // ---------------- 필터 탭/요일 ----------------
+    function getWeekdayStr(d) { return ["일","월","화","수","목","금","토"][d]; }
     function setRange(type) {
       rangeType = type;
       localStorage.setItem('rangeType', type);
@@ -247,7 +208,6 @@
       }
       document.getElementById('weekdayFilter').innerHTML = wdHtml;
     }
-    // ---------------- 마이페이지 ----------------
     function toggleMyPage() {
       if(!myName) {
         myName = prompt("마이페이지: 내 이름을 입력하세요 (예: 김민지)");
@@ -258,28 +218,31 @@
       document.getElementById('mypageBtn').classList.toggle('active',mypage);
       renderCards();
     }
-    // ---------------- 검색/필터/정렬 ----------------
     function getFilteredSchedule() {
       let arr = schedule.slice();
       // 범위 필터
       let from="", to="";
-      if(rangeType==='week') [from,to]=getWeekRange();
-      else [from,to]=getMonthRange();
+      if(rangeType==='week') {
+        const today = new Date(), day = today.getDay()||7;
+        const monday = new Date(today); monday.setDate(today.getDate()-day+1);
+        const sunday = new Date(monday); sunday.setDate(monday.getDate()+6);
+        from = monday.toISOString().slice(0,10); to = sunday.toISOString().slice(0,10);
+      } else {
+        const today = new Date();
+        const first = new Date(today.getFullYear(),today.getMonth(),1);
+        const last = new Date(today.getFullYear(),today.getMonth()+1,0);
+        from = first.toISOString().slice(0,10); to = last.toISOString().slice(0,10);
+      }
       arr = arr.filter(row=>row.date>=from && row.date<=to);
-      // 요일 필터
       if(filterWeekday!=="") arr = arr.filter(row=>(new Date(row.date).getDay()==filterWeekday));
-      // 마이페이지
       if(mypage && myName) arr = arr.filter(row=>row.name==myName);
-      // 검색
       let q = document.getElementById('search').value.trim();
       if(q) arr = arr.filter(row=>
         (row.name&&row.name.includes(q)) || (row.place&&row.place.includes(q))
       );
-      // 정렬: 날짜, 이름
       arr.sort((a,b)=>a.date.localeCompare(b.date)||a.name.localeCompare(b.name));
       return arr;
     }
-    // ---------------- 카드 렌더링 ----------------
     function renderCards() {
       document.getElementById('summaryView').style.display="none";
       let arr = getFilteredSchedule();
@@ -290,7 +253,6 @@
       arr.forEach(row=>{
         const d = new Date(row.date);
         const weekday = getWeekdayStr(d.getDay());
-        // 날짜 라벨
         if(row.date!==lastDate) {
           let holiday=holidays2025[row.date];
           box.innerHTML += `<div style="font-weight:700;font-size:1.03em;margin:1.3em 0 0.1em 0;color:${holiday?'#e53935':'#2196f3'}">
@@ -298,7 +260,6 @@
           </div>`;
           lastDate=row.date;
         }
-        // 카드
         let card = document.createElement('div');
         card.className = 'card'+(holidays2025[row.date]?' holiday':'')+(row.attended?'':' completed');
         let color = memberColors[row.name]||'var(--default)';
@@ -306,16 +267,18 @@
           <div class="colorbar" style="background:${color}"></div>
           <h3>${row.name||''}</h3>
           <p class="date">${row.date||''}</p>
-          <p class="place">${row.place||''} <span class="type-tag">${row.type||''}</span></p>
+          <div class="tags">
+            <span class="type-tag">${row.type||''}</span>
+            ${row.place&&row.place.includes('휴무')?'<span class="type-tag off-tag">휴무</span>':''}
+          </div>
+          <p class="place">${row.place||''}</p>
           <label><input type="checkbox" ${row.attended?'checked':''} onchange="toggleAttendance('${row.name}','${row.date}')"> 출근 여부</label>
           <label>DB 수 <input type="number" min="0" value="${row.dbCount||''}" placeholder="DB 수 입력" onchange="changeDB('${row.name}','${row.date}',this.value)"></label>
           <textarea placeholder="메모 입력" oninput="changeMemo('${row.name}','${row.date}',this.value)">${row.memo||''}</textarea>
-          <div style="font-size:0.8em;color:#888;margin-top:0.2em;">${row.lastModified||''}</div>
         `;
         box.appendChild(card);
       });
     }
-    // ---------------- 출근/DB/메모 인터랙션 ----------------
     function toggleAttendance(name,date) {
       let idx = schedule.findIndex(row=>row.name==name&&row.date==date);
       if(idx<0) return;
@@ -337,7 +300,6 @@
       schedule[idx].lastModified = new Date().toLocaleString();
       saveData();
     }
-    // ---------------- 요약 보기 ----------------
     function showSummary() {
       let arr = getFilteredSchedule();
       let sumByPlace = {};
@@ -355,22 +317,15 @@
       box.style.display="block";
       window.scrollTo({top:0,behavior:"smooth"});
     }
-    // ---------------- 월별 휴무 자동 집계 ----------------
     function renderMonthOffSummary(arr) {
       let month = (new Date()).toISOString().slice(0,7);
       let offCnt = arr.filter(row=>(row.place&&row.place.includes('휴무')) && row.date.startsWith(month)).length;
       document.getElementById('monthOffSummary').innerText = `이번달 휴무: ${offCnt}일`;
     }
-    // ---------------- PDF 저장 ----------------
-    function savePDF() {
-      window.print();
-    }
-    function focusSearch() {
-      document.getElementById('search').focus();
-    }
-    // ---------------- 앱 시작 ----------------
-    renderWeekdayTabs();
-    loadData();
+    function savePDF() { window.print(); }
+    function focusSearch() { document.getElementById('search').focus(); }
+    // 앱 시작
+    renderWeekdayTabs(); loadData();
   </script>
 </body>
 </html>
