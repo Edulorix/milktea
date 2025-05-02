@@ -1,0 +1,20 @@
+[
+  {
+    "name": "김민지",
+    "date": "2025-05-01",
+    "place": "인천영풍",
+    "type": "서점",
+    "memo": "",
+    "dbCount": 0,
+    "attended": false
+  },
+  {
+    "name": "우인옥",
+    "date": "2025-05-01",
+    "place": "송도교보",
+    "type": "서점",
+    "memo": "유치원 병행",
+    "dbCount": 3,
+    "attended": true
+  }
+]
