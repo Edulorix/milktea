@@ -50,7 +50,11 @@
     button:hover { background-color: #005fa3; }
     .delete-button {
       background-color: var(--danger);
-      margin-top: 0.5rem;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 4px 8px;
+      cursor: pointer;
     }
     .row-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
     table {
@@ -64,9 +68,14 @@
       text-align: center;
     }
     th { background: #eaf4ff; }
-    td[data-type="유치원"] { background: #e0f7fa; }
+    td[data-type="유치원/어린이집"] { background: #e0f7fa; }
     td[data-type="행사"] { background: #fff9c4; }
     td[data-type="휴무"] { background: #eeeeee; }
+    td[data-type="서점"] { background: #ffebee; }
+    td[data-type="실내"] { background: #e8f5e9; }
+    td[data-type="초등학교"] { background: #ede7f6; }
+    td[data-type="박람회"] { background: #fff3e0; }
+    td[data-type="기타"] { background: #f3f3f3; }
     @media (min-width: 768px) {
       .card { max-width: 600px; margin: 0 auto 1rem; }
     }
@@ -113,7 +122,7 @@
   <h3>> 전체 스케줄 보기</h3>
   <table id="scheduleTable">
     <thead>
-      <tr><th>이름</th><th>날짜</th><th>근무지</th><th>유형</th><th>비고</th></tr>
+      <tr><th>이름</th><th>날짜</th><th>근무지</th><th>유형</th><th>비고</th><th>삭제</th></tr>
     </thead>
     <tbody></tbody>
   </table>
@@ -137,21 +146,32 @@
       const savedData = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
       savedData.push(entry);
       localStorage.setItem(scheduleKey, JSON.stringify(savedData));
-      appendToTable(entry);
-      updateSummary();
+      refreshTable(savedData);
       clearForm();
     }
 
-    function appendToTable(entry) {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${entry.name}</td>
-        <td>${entry.date}</td>
-        <td>${entry.location}</td>
-        <td data-type="${entry.category}">${entry.category}</td>
-        <td>${entry.note}</td>
-      `;
-      table.appendChild(row);
+    function deleteEntry(index) {
+      const savedData = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
+      savedData.splice(index, 1);
+      localStorage.setItem(scheduleKey, JSON.stringify(savedData));
+      refreshTable(savedData);
+    }
+
+    function refreshTable(data) {
+      table.innerHTML = "";
+      data.forEach((entry, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${entry.name}</td>
+          <td>${entry.date}</td>
+          <td>${entry.location}</td>
+          <td data-type="${entry.category}">${entry.category}</td>
+          <td>${entry.note}</td>
+          <td><button class="delete-button" onclick="deleteEntry(${index})">삭제</button></td>
+        `;
+        table.appendChild(row);
+      });
+      updateSummary(data);
     }
 
     function clearForm() {
@@ -164,18 +184,14 @@
 
     function loadSavedSchedules() {
       const savedData = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
-      savedData.forEach(entry => appendToTable(entry));
-      updateSummary();
+      refreshTable(savedData);
     }
 
-    function updateSummary() {
-      const savedData = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
+    function updateSummary(data) {
       const summary = {};
-
-      savedData.forEach(entry => {
+      data.forEach(entry => {
         summary[entry.category] = (summary[entry.category] || 0) + 1;
       });
-
       summaryContainer.innerHTML = Object.entries(summary).map(
         ([category, count]) => `<p><strong>${category}</strong>: ${count}회</p>`
       ).join("");
