@@ -21,105 +21,57 @@
       --color-김미경: #f0f4c3; --color-김선애: #f5e1fc; --color-어현미: #ffecb3; --color-안세진: #e6ee9c;
       --default: #e3f2fd;
     }
-    body {
-      background:var(--main-bg); font-family:var(--font); margin:0; color:#222;
-      padding-bottom:68px;
-    }
-    header {
-      background:var(--primary); color:#fff; padding:1.2em 0.8em 0.8em 0.8em;
-      border-radius:0 0 1.3em 1.3em; box-shadow:0 2px 12px #90caf9aa;
-      text-align:center;
-    }
+    body { background:var(--main-bg); font-family:var(--font); margin:0; color:#222; padding-bottom:72px;}
+    header { background:var(--primary); color:#fff; padding:1.2em 0.8em 0.8em 0.8em; border-radius:0 0 1.3em 1.3em; box-shadow:0 2px 12px #90caf9aa; text-align:center;}
     .header-title { font-size:1.22em; font-weight:700; letter-spacing:0.04em; }
-    .tabbar {
-      display:flex; gap:0.35em; justify-content:center; margin:1em 0 0.5em 0;
-    }
-    .tabbar button {
-      background:var(--main-bg); color:var(--primary); border:none;
-      border-radius:0.7em; font-size:1.01em; font-weight:600; cursor:pointer;
-      padding:0.44em 1.1em; margin-right:0.1em; transition:.1s;
-    }
+    .tabbar { display:flex; gap:0.35em; justify-content:center; margin:1em 0 0.5em 0;}
+    .tabbar button { background:var(--main-bg); color:var(--primary); border:none; border-radius:0.7em; font-size:1.01em; font-weight:600; cursor:pointer; padding:0.44em 1.1em; margin-right:0.1em; transition:.1s;}
     .tabbar .active { background:var(--primary); color:#fff; }
     .weekdaybar { display:flex; gap:0.3em; justify-content:center; margin:0.3em 0 0.7em 0;}
-    .weekdaybar button {
-      background:var(--main-bg); color:var(--primary); border:none; border-radius:0.5em;
-      font-size:1em; font-weight:500; cursor:pointer; padding:0.32em 0.85em;
-    }
+    .weekdaybar button { background:var(--main-bg); color:var(--primary); border:none; border-radius:0.5em; font-size:1em; font-weight:500; cursor:pointer; padding:0.32em 0.85em;}
     .weekdaybar .active { background:var(--primary); color:#fff; }
-    .searchbar {
-      display:flex; gap:0.6em; margin:0.7em 0 0.7em 0; justify-content:center;
-      align-items: center;
-    }
-    .searchbar input[type="text"] {
-      border-radius:0.7em; border:1.5px solid #bbdefb; font-size:1em;
-      padding:0.44em 1.1em; width:180px; background:#fff;
-    }
-    .schedule-list {
-      display:grid; grid-template-columns:1fr; gap:1em; max-width:700px; margin:0 auto;
-    }
-    @media(min-width:660px) {
-      .schedule-list { grid-template-columns:1fr 1fr; }
-    }
-    .card {
-      border-radius:var(--card-radius);
-      border: 2px solid var(--card-border);
-      box-shadow:var(--box-shadow);
-      padding:16px 14px 12px 14px;
-      display:flex; flex-direction:column; gap:0.19em; min-width:0; position:relative;
-      background: var(--default);
-      margin-bottom:2px;
-      transition:.14s;
-    }
+    .searchbar { display:flex; gap:0.6em; margin:0.7em 0 0.7em 0; justify-content:center; align-items: center;}
+    .searchbar input[type="text"] { border-radius:0.7em; border:1.5px solid #bbdefb; font-size:1em; padding:0.44em 1.1em; width:180px; background:#fff;}
+    .schedule-list { display:grid; grid-template-columns:1fr; gap:1em; max-width:700px; margin:0 auto;}
+    @media(min-width:660px) {.schedule-list { grid-template-columns:1fr 1fr; }}
+    .card { border-radius:var(--card-radius); border:2px solid var(--card-border); box-shadow:var(--box-shadow); padding:16px 14px 12px 14px; display:flex; flex-direction:column; gap:0.19em; min-width:0; position:relative; background:var(--default); margin-bottom:2px; transition:.14s;}
     .card.holiday { background:var(--holiday);}
     .card.completed { opacity: 0.6; background:var(--gray);}
-    .card .colorbar {
-      position:absolute; left:0; top:0; bottom:0; width:0.7em; border-radius:var(--card-radius) 0 0 var(--card-radius);
-    }
+    .card .colorbar { position:absolute; left:0; top:0; bottom:0; width:0.7em; border-radius:var(--card-radius) 0 0 var(--card-radius);}
     .card h3 { font-size:1.12em; font-weight:700; margin:0 0 0.15em 0;}
     .card .date {font-size:0.99em; color:#1e88e5; font-weight:500;}
     .card .place {font-size:1em; color:#3949ab; font-weight:600; margin-bottom:0.07em;}
     .card .tags { margin:0.03em 0 0.25em 0; }
     .type-tag {display:inline-block;padding:0.08em 0.6em; border-radius:0.6em; font-size:0.91em; margin-right:0.2em; background:#bbdefb; color:#1565c0;}
-    .off-tag { background:#ffe082; color:#f57c00; }
+    .off-tag { background:#ffe082; color:#f57c00;}
     .card .memo {margin:0.17em 0 0.07em 0; font-size:0.93em; color:#607d8b; background:#f0f4c3; border-radius:0.5em; padding:0.09em 0.7em;}
     .card .holiday-label { color:#e57373; font-size:0.99em; margin-left:0.54em; font-weight:600;}
     .card input[type="number"] { width:4em; border-radius:0.6em; border:1px solid #bbdefb; background:#fff; padding:0.21em 0.4em;}
     .card label { font-size:0.95em; color:#555; margin-right:0.6em;}
-    .card textarea {
-      border-radius:0.6em; border:1px solid #bbdefb; font-size:1em;
-      padding:0.23em 0.7em; width:96%; min-height:1.8em; resize:vertical;
-      margin-top:0.18em; background:#fff;
-    }
-    .fixed-footer {
-      position:fixed; left:0; bottom:0; width:100vw; background:#fff;
-      box-shadow:0 -2px 14px #90caf955;
-      display:flex; justify-content:space-around; align-items:center;
-      z-index:1001; height:58px; border-radius:1.2em 1.2em 0 0;
-    }
-    .fixed-footer button {
-      background:var(--primary); color:#fff; border:none;
-      border-radius:0.8em; font-size:1.03em; font-weight:600;
-      padding:0.54em 1.3em; cursor:pointer; margin:0 0.3em;
-      box-shadow:0 2px 8px #bbdefb77; transition:.1s;
-      display:flex; align-items:center; gap:0.3em;
-    }
+    .card textarea { border-radius:0.6em; border:1px solid #bbdefb; font-size:1em; padding:0.23em 0.7em; width:96%; min-height:1.8em; resize:vertical; margin-top:0.18em; background:#fff;}
+    .card .edit-btn { position:absolute; top:8px; right:10px; background:none; border:none; color:#1976d2; font-size:1.2em; cursor:pointer;}
+    .card .del-btn { position:absolute; top:8px; right:40px; background:none; border:none; color:#e53935; font-size:1.2em; cursor:pointer;}
+    .fixed-footer { position:fixed; left:0; bottom:0; width:100vw; background:#fff; box-shadow:0 -2px 14px #90caf955; display:flex; justify-content:space-around; align-items:center; z-index:1001; height:58px; border-radius:1.2em 1.2em 0 0;}
+    .fixed-footer button { background:var(--primary); color:#fff; border:none; border-radius:0.8em; font-size:1.03em; font-weight:600; padding:0.54em 1.3em; cursor:pointer; margin:0 0.3em; box-shadow:0 2px 8px #bbdefb77; transition:.1s; display:flex; align-items:center; gap:0.3em;}
     .summary-view { max-width:700px; margin:1.7em auto 0 auto; }
-    .summary-card {
-      box-shadow:0 2px 12px #e3f2fd77; border-radius:var(--card-radius);
-      background:var(--main-bg); padding:1em 1.1em; margin-bottom:1em;
-    }
+    .summary-card { box-shadow:0 2px 12px #e3f2fd77; border-radius:var(--card-radius); background:var(--main-bg); padding:1em 1.1em; margin-bottom:1em;}
     .summary-card .name { font-weight:700; color:#1976d2; font-size:1.1em;}
     .summary-row { margin:0.38em 0; }
     .summary-row .place { font-weight:500; color:#3949ab;}
     .summary-row .count { color:#1976d2; font-weight:700; margin-left:0.17em;}
     .month-off-summary { text-align:center; color:#c62828; margin:1em 0 0.2em 0; font-size:1em; font-weight:600;}
     .mypage-btn { margin-left:0.4em; margin-top:0.1em;}
-    @media (max-width:540px) {
-      .schedule-list { padding:0 0.1em;}
-      .summary-view { padding:0 0.1em;}
-      .searchbar input[type="text"] { width:98px;}
-      .fixed-footer button { font-size:0.95em; padding:0.53em 0.3em;}
-    }
+    .modal-bg { position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:2000;display:none;justify-content:center;align-items:center;}
+    .modal { background:#fff; border-radius:1.2em; padding:1.3em 1em; max-width:340px; width:92vw; }
+    .modal h2 { font-size:1.15em; margin-bottom:1em;}
+    .modal label { display:block; margin:0.4em 0 0.1em 0;}
+    .modal input, .modal select, .modal textarea { width:98%; padding:0.4em 0.6em; margin-bottom:0.5em; border-radius:0.6em; border:1px solid #bbdefb; font-size:1em;}
+    .modal textarea { min-height:2em;}
+    .modal .btnbar { text-align:right; margin-top:1.1em;}
+    .modal .btnbar button {background:var(--primary);color:#fff;border:none;padding:0.48em 1.3em;border-radius:0.7em;font-size:1em;margin-left:0.6em;}
+    .modal .btnbar .cancel {background:#b0bec5;}
+    .login-admin {margin-bottom:1em;}
+    @media (max-width:540px) { .schedule-list { padding:0 0.1em;} .summary-view { padding:0 0.1em;} .searchbar input[type="text"] { width:98px;} .fixed-footer button { font-size:0.95em; padding:0.53em 0.3em;}}
   </style>
 </head>
 <body>
@@ -129,6 +81,8 @@
       <button onclick="setRange('week')" id="tab-week">주간</button>
       <button onclick="setRange('month')" id="tab-month">월간</button>
       <button class="mypage-btn" onclick="toggleMyPage()" id="mypageBtn">마이페이지</button>
+      <button class="mypage-btn" onclick="adminLogin()" id="adminBtn"></button>
+      <button class="mypage-btn" onclick="showAddModal()" id="addBtn" style="display:none;">+ 일정추가</button>
     </div>
     <div class="weekdaybar" id="weekdayFilter"></div>
   </header>
@@ -139,39 +93,28 @@
   <div class="month-off-summary" id="monthOffSummary"></div>
   <div class="schedule-list" id="scheduleList"></div>
   <div class="summary-view" id="summaryView" style="display:none;"></div>
+
+  <!-- 일정 추가/수정 모달 -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal" id="modalContent"></div>
+  </div>
   <div class="fixed-footer">
     <button onclick="savePDF()"><span>PDF 저장</span></button>
     <button onclick="focusSearch()"><span>검색</span></button>
     <button onclick="showSummary()"><span>요약 보기</span></button>
   </div>
   <script>
-    // 팀원별 색상
-    const memberColors = {
-      "김민지": "var(--color-김민지)", "우인옥": "var(--color-우인옥)", "함주현":"var(--color-함주현)",
-      "김민정":"var(--color-김민정)", "최형심":"var(--color-최형심)", "조인자":"var(--color-조인자)",
-      "유지수":"var(--color-유지수)", "윤진숙":"var(--color-윤진숙)", "원경희":"var(--color-원경희)",
-      "김미경":"var(--color-김미경)", "김선애":"var(--color-김선애)", "어현미":"var(--color-어현미)", "안세진":"var(--color-안세진)"
-    };
-    // 일정 데이터(내장)
+    // 관리자 계정: 국장1명, 팀장2명 (예시/실제 암호는 변경)
+    const ADMINS = [
+      {role:'국장', name:'국장님', pw:'milkhead'},
+      {role:'팀장', name:'김팀장', pw:'milkteam1'},
+      {role:'팀장', name:'박팀장', pw:'milkteam2'}
+    ];
+    let isAdmin = false, adminName = "";
+    const memberColors = { "김민지": "var(--color-김민지)", "우인옥": "var(--color-우인옥)", "함주현":"var(--color-함주현)", "김민정":"var(--color-김민정)", "최형심":"var(--color-최형심)", "조인자":"var(--color-조인자)", "유지수":"var(--color-유지수)", "윤진숙":"var(--color-윤진숙)", "원경희":"var(--color-원경희)", "김미경":"var(--color-김미경)", "김선애":"var(--color-김선애)", "어현미":"var(--color-어현미)", "안세진":"var(--color-안세진)" };
     let schedule = [
-      {
-        "name": "김민지",
-        "date": "2025-05-01",
-        "place": "인천영풍",
-        "type": "서점",
-        "memo": "",
-        "dbCount": 0,
-        "attended": false
-      },
-      {
-        "name": "우인옥",
-        "date": "2025-05-01",
-        "place": "송도교보",
-        "type": "서점",
-        "memo": "유치원 병행",
-        "dbCount": 3,
-        "attended": true
-      }
+      { name:"김민지", date:"2025-05-01", place:"인천영풍", type:"출근", memo:"", dbCount:0, attended:false },
+      { name:"우인옥", date:"2025-05-01", place:"송도교보", type:"출근", memo:"유치원 병행", dbCount:3, attended:true }
     ];
     const holidays2025 = {
       "2025-01-01":"신정", "2025-02-27":"설연휴", "2025-02-28":"설날", "2025-03-01":"삼일절",
@@ -179,29 +122,22 @@
       "2025-06-06":"현충일", "2025-08-15":"광복절", "2025-09-06":"추석연휴", "2025-09-07":"추석",
       "2025-09-08":"추석연휴", "2025-10-03":"개천절", "2025-10-09":"한글날", "2025-12-25":"성탄절"
     };
-    let rangeType = localStorage.getItem('rangeType') || 'month'; // 'week' or 'month'
-    let filterWeekday = ""; // 0~6 or ""
-    let mypage = false;
-    let myName = localStorage.getItem('myName') || "";
-    // 데이터 localStorage 우선 적용(있으면 덮어쓰기)
-    if(localStorage.getItem('schedule')) {
-      try { schedule = JSON.parse(localStorage.getItem('schedule')); } catch(e){}
-    } else { saveData(); }
-    function saveData() {
-      localStorage.setItem('schedule', JSON.stringify(schedule));
-    }
+    let rangeType = localStorage.getItem('rangeType') || 'month';
+    let filterWeekday = ""; let mypage = false; let myName = localStorage.getItem('myName') || "";
+
+    if(localStorage.getItem('schedule')) { try { schedule = JSON.parse(localStorage.getItem('schedule')); } catch(e){} } else { saveData(); }
+    function saveData() { localStorage.setItem('schedule', JSON.stringify(schedule)); }
+
     function getWeekdayStr(d) { return ["일","월","화","수","목","금","토"][d]; }
     function setRange(type) {
-      rangeType = type;
-      localStorage.setItem('rangeType', type);
+      rangeType = type; localStorage.setItem('rangeType', type);
       document.getElementById('tab-week').classList.toggle('active',type==='week');
       document.getElementById('tab-month').classList.toggle('active',type==='month');
       renderCards();
     }
     function setWeekdayFilter(idx) {
       filterWeekday = filterWeekday===idx?"":idx;
-      renderWeekdayTabs();
-      renderCards();
+      renderWeekdayTabs(); renderCards();
     }
     function renderWeekdayTabs() {
       let wdHtml = "";
@@ -213,16 +149,38 @@
     function toggleMyPage() {
       if(!myName) {
         myName = prompt("마이페이지: 내 이름을 입력하세요 (예: 김민지)");
-        if(!myName) return;
-        localStorage.setItem('myName', myName);
+        if(!myName) return; localStorage.setItem('myName', myName);
       }
-      mypage = !mypage;
-      document.getElementById('mypageBtn').classList.toggle('active',mypage);
-      renderCards();
+      mypage = !mypage; document.getElementById('mypageBtn').classList.toggle('active',mypage); renderCards();
+    }
+    function adminLogin() {
+      let sel = '<select id="adminSelect">';
+      ADMINS.forEach((a,i)=>{ sel+=`<option value="${i}">${a.role} - ${a.name}</option>`; }); sel+='</select>';
+      showModal(`<h2>관리자 로그인</h2>
+        <div class="login-admin">
+        ${sel}
+        <input id="adminPw" type="password" placeholder="비밀번호 입력"></div>
+        <div class="btnbar">
+          <button onclick="loginAdminOk()">로그인</button>
+          <button class="cancel" onclick="closeModal()">취소</button>
+        </div>`
+      );
+    }
+    function loginAdminOk() {
+      let idx=document.getElementById('adminSelect').value, pw=document.getElementById('adminPw').value;
+      if(ADMINS[idx].pw===pw) {
+        isAdmin=true; adminName=ADMINS[idx].name; closeModal(); showToast('관리자 로그인 완료'); renderCards();
+      } else { showToast('비밀번호 오류'); }
+    }
+    function adminLogout() { isAdmin=false; adminName=""; showToast('로그아웃'); renderCards();}
+    function renderAdminBtn() {
+      let btn=document.getElementById('adminBtn');
+      btn.innerText = isAdmin?(adminName+'(로그아웃)'):'관리자';
+      btn.onclick = isAdmin?adminLogout:adminLogin;
+      document.getElementById('addBtn').style.display = isAdmin?"":"none";
     }
     function getFilteredSchedule() {
       let arr = schedule.slice();
-      // 범위 필터
       let from="", to="";
       if(rangeType==='week') {
         const today = new Date(), day = today.getDay()||7;
@@ -239,20 +197,19 @@
       if(filterWeekday!=="") arr = arr.filter(row=>(new Date(row.date).getDay()==filterWeekday));
       if(mypage && myName) arr = arr.filter(row=>row.name==myName);
       let q = document.getElementById('search').value.trim();
-      if(q) arr = arr.filter(row=>
-        (row.name&&row.name.includes(q)) || (row.place&&row.place.includes(q))
-      );
+      if(q) arr = arr.filter(row=>(row.name&&row.name.includes(q)) || (row.place&&row.place.includes(q)));
       arr.sort((a,b)=>a.date.localeCompare(b.date)||a.name.localeCompare(b.name));
       return arr;
     }
     function renderCards() {
+      renderAdminBtn();
       document.getElementById('summaryView').style.display="none";
       let arr = getFilteredSchedule();
       let box = document.getElementById('scheduleList');
       box.innerHTML = "";
       let lastDate = "";
       renderMonthOffSummary(arr);
-      arr.forEach(row=>{
+      arr.forEach((row,i)=>{
         const d = new Date(row.date);
         const weekday = getWeekdayStr(d.getDay());
         if(row.date!==lastDate) {
@@ -274,48 +231,111 @@
             ${row.place&&row.place.includes('휴무')?'<span class="type-tag off-tag">휴무</span>':''}
           </div>
           <p class="place">${row.place||''}</p>
-          <label><input type="checkbox" ${row.attended?'checked':''} onchange="toggleAttendance('${row.name}','${row.date}')"> 출근 여부</label>
-          <label>DB 수 <input type="number" min="0" value="${row.dbCount||''}" placeholder="DB 수 입력" onchange="changeDB('${row.name}','${row.date}',this.value)"></label>
-          <textarea placeholder="메모 입력" oninput="changeMemo('${row.name}','${row.date}',this.value)">${row.memo||''}</textarea>
+          <label><input type="checkbox" ${row.attended?'checked':''} onchange="toggleAttendance(${i})" ${isAdmin?'':'disabled'}> 출근 여부</label>
+          <label>DB 수 <input type="number" min="0" value="${row.dbCount||''}" placeholder="DB 수 입력" onchange="changeDB(${i},this.value)" ${isAdmin?'':'disabled'}></label>
+          <textarea placeholder="메모 입력" oninput="changeMemo(${i},this.value)" ${isAdmin?'':'readonly'}>${row.memo||''}</textarea>
+          ${isAdmin?`<button class="edit-btn" onclick="showEditModal(${i})">✏️</button>
+          <button class="del-btn" onclick="delSchedule(${i})">🗑️</button>`:""}
         `;
         box.appendChild(card);
       });
     }
-    function toggleAttendance(name,date) {
-      let idx = schedule.findIndex(row=>row.name==name&&row.date==date);
-      if(idx<0) return;
+    function toggleAttendance(idx) {
       schedule[idx].attended = !schedule[idx].attended;
       schedule[idx].lastModified = new Date().toLocaleString();
       saveData(); renderCards();
     }
-    function changeDB(name,date,val) {
-      let idx = schedule.findIndex(row=>row.name==name&&row.date==date);
-      if(idx<0) return;
+    function changeDB(idx,val) {
       schedule[idx].dbCount = Number(val)||"";
       schedule[idx].lastModified = new Date().toLocaleString();
       saveData();
     }
-    function changeMemo(name,date,val) {
-      let idx = schedule.findIndex(row=>row.name==name&&row.date==date);
-      if(idx<0) return;
+    function changeMemo(idx,val) {
       schedule[idx].memo = val;
       schedule[idx].lastModified = new Date().toLocaleString();
       saveData();
     }
+    function showAddModal() { showEditModal(); }
+    function showEditModal(idx) {
+      let mode = (typeof idx==="number"), row = mode?schedule[idx]:{name:"",date:"",place:"",type:"출근",dbCount:0,attended:false,memo:""};
+      let names = Array.from(new Set(schedule.map(r=>r.name))).filter(Boolean);
+      let html = `<h2>일정 ${mode?"수정":"추가"}</h2>
+        <label>이름<select id="edit-name">${names.map(n=>`<option${row.name==n?' selected':''}>${n}</option>`).join('')}<option value="">직접입력</option></select>
+        <input id="edit-name2" placeholder="새 이름 입력" style="display:none"></label>
+        <label>날짜<input type="date" id="edit-date" value="${row.date||''}"></label>
+        <label>근무지(여러 곳은 ,로 구분)<input id="edit-place" value="${row.place||''}" placeholder="근무지"></label>
+        <label>근무유형<select id="edit-type"><option>출근</option><option>휴무</option><option>외근</option></select></label>
+        <label>DB 수<input type="number" id="edit-db" value="${row.dbCount||''}" placeholder="DB 수"></label>
+        <label>출근여부 <input type="checkbox" id="edit-attend" ${row.attended?'checked':''}></label>
+        <label>메모<textarea id="edit-memo">${row.memo||''}</textarea></label>
+        <div class="btnbar">
+          <button onclick="saveEditModal(${mode?idx:"null"})">${mode?"수정":"추가"}</button>
+          <button class="cancel" onclick="closeModal()">취소</button>
+        </div>
+        <script>
+        document.getElementById('edit-name').onchange=function(){
+          document.getElementById('edit-name2').style.display=this.value===''?'block':'none';
+        }
+        </script>
+      `;
+      showModal(html);
+      setTimeout(()=>{ // 새 이름 입력란 show/hide
+        document.getElementById('edit-name').onchange = function(){
+          document.getElementById('edit-name2').style.display = this.value===''?'block':'none';
+        };
+      },100);
+    }
+    function saveEditModal(idx) {
+      let name=document.getElementById('edit-name').value;
+      if(name==="") name=document.getElementById('edit-name2').value.trim();
+      let date=document.getElementById('edit-date').value;
+      let place=document.getElementById('edit-place').value.trim();
+      let type=document.getElementById('edit-type').value;
+      let dbCount=Number(document.getElementById('edit-db').value)||0;
+      let attended=document.getElementById('edit-attend').checked;
+      let memo=document.getElementById('edit-memo').value;
+      if(!name||!date) { showToast('이름과 날짜는 필수입니다'); return; }
+      // 여러 근무지 처리: 콤마로 여러 줄 생성
+      let places = place.split(',').map(s=>s.trim()).filter(Boolean);
+      if(typeof idx==="number") {
+        schedule[idx]={name,date,place:places.join(', '),type,dbCount,attended,memo};
+      } else {
+        places.forEach(p=>{
+          schedule.push({name,date,place:p,type,dbCount,attended,memo});
+        });
+      }
+      saveData(); closeModal(); renderCards();
+    }
+    function delSchedule(idx) {
+      if(confirm('정말 삭제하시겠습니까?')) { schedule.splice(idx,1); saveData(); renderCards(); }
+    }
+    function showModal(html) {
+      document.getElementById('modalContent').innerHTML=html;
+      document.getElementById('modalBg').style.display='flex';
+    }
+    function closeModal() { document.getElementById('modalBg').style.display='none'; }
+    function showToast(msg) {
+      let t=document.createElement('div');
+      t.style.position="fixed";t.style.bottom="6%";t.style.left="50%";t.style.transform="translateX(-50%)";
+      t.style.background="#2196f3cc";t.style.color="#fff";t.style.padding="1em 1.3em";t.style.borderRadius="2.2em";t.style.fontSize="1.07em";t.style.zIndex=3000;
+      t.innerText=msg; document.body.appendChild(t);
+      setTimeout(()=>{t.remove();},1800);
+    }
     function showSummary() {
       let arr = getFilteredSchedule();
-      let sumByPlace = {};
+      let sumByPlace = {}, sumByName = {}, month = (new Date()).toISOString().slice(0,7);
       arr.forEach(row=>{
-        if(!row.place||row.place==='휴무') return;
-        let key = row.place;
-        if(!sumByPlace[key]) sumByPlace[key]=0;
-        sumByPlace[key]++;
+        // 근무지별
+        if(row.place&&!row.place.includes('휴무')) sumByPlace[row.place]=(sumByPlace[row.place]||0)+1;
+        // 이름별
+        if(!sumByName[row.name]) sumByName[row.name]={휴무:0,근무:0,외근:0};
+        if(row.type=='휴무'||row.place.includes('휴무')) sumByName[row.name].휴무++; else if(row.type=='외근') sumByName[row.name].외근++; else sumByName[row.name].근무++;
       });
-      let box = document.getElementById('summaryView');
-      box.innerHTML = `<div style="font-size:1.13em; font-weight:700; margin-bottom:1em; color:#2196f3;">기관별 누적 방문 횟수</div>`;
-      Object.entries(sumByPlace).sort((a,b)=>b[1]-a[1]).forEach(([place,cnt])=>{
-        box.innerHTML += `<div class="summary-card"><span class="place">${place}</span> <span class="count">${cnt}회</span></div>`;
-      });
+      let box=document.getElementById('summaryView');
+      box.innerHTML = `<div style="font-size:1.13em; font-weight:700; margin-bottom:1em; color:#2196f3;">전체 요약</div>
+      <div class="summary-card"><b>근무지별 누적 방문</b><br>${Object.entries(sumByPlace).sort((a,b)=>b[1]-a[1]).map(([place,cnt])=>`<span class="place">${place}</span> <span class="count">${cnt}회</span>`).join('<br>')}</div>
+      <div class="summary-card"><b>팀원별 월별 휴무/근무 통계</b><br>${Object.entries(sumByName).map(([name,s])=>`<span class="name">${name}</span>: 휴무 ${s.휴무} / 출근 ${s.근무} / 외근 ${s.외근}`).join('<br>')}</div>
+      `;
       box.style.display="block";
       window.scrollTo({top:0,behavior:"smooth"});
     }
@@ -326,7 +346,6 @@
     }
     function savePDF() { window.print(); }
     function focusSearch() { document.getElementById('search').focus(); }
-    // 앱 시작
     renderWeekdayTabs(); renderCards();
   </script>
 </body>
