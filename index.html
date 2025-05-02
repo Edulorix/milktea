@@ -4,15 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=no">
   <title>밀크티 스케줄 뷰어</title>
-  <meta name="description" content="교육 홍보 교사 팀의 월간 스케줄을 모바일에서 직관적으로 확인할 수 있는 앱입니다. 팀장 1명이 데이터를 관리하며, 팀원은 보기만 합니다.">
+  <meta name="description" content="교육 홍보 교사 팀의 월간 스케줄을 모바일에서 직관적으로 확인할 수 있는 앱입니다.">
+  <meta name="theme-color" content="#f0f8ff">
+  <!-- PWA용 메타 -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <style>
     :root {
       --main-bg: #f0f8ff;
       --primary: #2196f3;
-      --card-radius: 1.1em;
-      --box-shadow: 0 2px 14px 0 #e3f2fd;
+      --holiday: #ffecec;
+      --card-radius: 10px;
+      --card-border: #b6e0ff;
+      --box-shadow: 0 2px 5px rgba(0,0,0,0.05);
       --font: Arial, 'Pretendard', 'Noto Sans KR', sans-serif;
-      --holiday: #e57373;
       --gray: #e0e0e0;
       /* 팀원별 색상 */
       --color-김민지: #b3e5fc;
@@ -49,12 +54,12 @@
       display:flex; gap:0.45em; margin:0.7em 0 0.2em 0;
       width:100%; justify-content:center;
     }
-    .filter-tabs button {
+    .filter-tabs button, .mypage-btn {
       background:var(--main-bg); color:var(--primary); border:none;
       border-radius:0.7em; font-size:1.01em; font-weight:600; cursor:pointer;
-      padding:0.44em 1.3em; transition:.1s;
+      padding:0.44em 1.1em; margin-right:0.15em; transition:.1s;
     }
-    .filter-tabs .active { background:var(--primary); color:#fff; }
+    .filter-tabs .active, .mypage-btn.active { background:var(--primary); color:#fff; }
     .weekday-filter { display:flex; gap:0.3em; justify-content:center; margin:0.3em 0 0.7em 0;}
     .weekday-filter button {
       background:var(--main-bg); color:var(--primary); border:none; border-radius:0.5em;
@@ -69,34 +74,41 @@
       border-radius:0.7em; border:1.5px solid #bbdefb; font-size:1em;
       padding:0.44em 1.1em; width:180px; background:#fff;
     }
-    .schedule-list { display:flex; flex-direction:column; gap:1em; max-width:520px; margin:0 auto;}
+    .schedule-list {
+      display:grid; grid-template-columns:1fr; gap:1em; max-width:700px; margin:0 auto;
+    }
+    @media(min-width:660px) {
+      .schedule-list { grid-template-columns:1fr 1fr; }
+    }
     .card {
       border-radius:var(--card-radius);
+      border: 2px solid var(--card-border);
       box-shadow:var(--box-shadow);
-      padding:1.05em 1em 0.7em 1em;
+      padding:16px 14px 12px 14px;
       display:flex; flex-direction:column; gap:0.18em; min-width:0;
       background: var(--default);
-      border: 2.3px solid transparent;
       position:relative;
       transition:.14s;
+      margin-bottom:2px;
     }
-    .card.holiday { border-color:var(--holiday);}
-    .card.gray { background: var(--gray); opacity:0.78;}
-    .card .card-row { display:flex; align-items:center; gap:1em; }
+    .card.holiday { background:var(--holiday);}
+    .card.completed { opacity: 0.6; background:var(--gray);}
     .card .colorbar {
-      position:absolute; left:0; top:0; bottom:0; width:0.8em; border-radius:var(--card-radius) 0 0 var(--card-radius);
+      position:absolute; left:0; top:0; bottom:0; width:0.7em; border-radius:var(--card-radius) 0 0 var(--card-radius);
     }
-    .card .name { font-size:1.09em; font-weight:700; margin-bottom:0.13em;}
+    .card h3 { font-size:1.11em; font-weight:700; margin:0 0 0.2em 0;}
     .card .date {font-size:0.98em; color:#1e88e5; font-weight:500;}
     .card .place {font-size:1em; color:#3949ab; font-weight:600; margin-bottom:0.08em;}
+    .card .type-tag {display:inline-block;padding:0.1em 0.6em; border-radius:0.6em; font-size:0.9em; margin-left:0.5em; background:#bbdefb; color:#1565c0;}
     .card .memo {margin:0.17em 0 0.07em 0; font-size:0.93em; color:#607d8b; background:#f0f4c3; border-radius:0.5em; padding:0.09em 0.7em;}
-    .card .holiday-label { color:var(--holiday); font-size:0.98em; margin-left:0.54em; font-weight:600;}
+    .card .holiday-label { color:#e57373; font-size:0.98em; margin-left:0.54em; font-weight:600;}
     .card input[type="number"] { width:4em; border-radius:0.6em; border:1px solid #bbdefb; background:#fff; padding:0.21em 0.4em;}
-    .card label { font-size:0.97em; color:#555; margin-right:0.6em;}
+    .card label { font-size:0.95em; color:#555; margin-right:0.6em;}
     .card textarea {
       border-radius:0.6em; border:1px solid #bbdefb; font-size:1em;
       padding:0.23em 0.7em; width:96%; min-height:1.7em; resize:vertical;
       margin-top:0.18em;
+      background:#fff;
     }
     .fixed-footer {
       position:fixed; left:0; bottom:0; width:100vw; background:#fff;
@@ -112,7 +124,7 @@
       box-shadow:0 2px 8px #bbdefb77; transition:.1s;
       display:flex; align-items:center; gap:0.3em;
     }
-    .summary-view { max-width:520px; margin:1.7em auto 0 auto; }
+    .summary-view { max-width:700px; margin:1.7em auto 0 auto; }
     .summary-card {
       box-shadow:0 2px 12px #e3f2fd77; border-radius:var(--card-radius);
       background:var(--main-bg); padding:1em 1.1em; margin-bottom:1em;
@@ -122,6 +134,7 @@
     .summary-row .place { font-weight:500; color:#3949ab;}
     .summary-row .count { color:#1976d2; font-weight:700; margin-left:0.17em;}
     .month-off-summary { text-align:center; color:#c62828; margin:1em 0 0.2em 0; font-size:1em; font-weight:600;}
+    .mypage-btn { margin-left:0.4em; margin-top:0.1em;}
     @media (max-width:540px) {
       .schedule-list { padding:0 0.1em;}
       .summary-view { padding:0 0.1em;}
@@ -136,6 +149,7 @@
     <div class="filter-tabs" id="dateFilter">
       <button onclick="setRange('week')" id="tab-week">주간</button>
       <button onclick="setRange('month')" id="tab-month">월간</button>
+      <button class="mypage-btn" onclick="toggleMyPage()" id="mypageBtn">마이페이지</button>
     </div>
     <div class="weekday-filter" id="weekdayFilter"></div>
   </header>
@@ -172,9 +186,10 @@
     // ---------------- 날짜 필터 등 상태 ----------------
     let rangeType = localStorage.getItem('rangeType') || 'month'; // 'week' or 'month'
     let filterWeekday = ""; // 0~6 or ""
+    let mypage = false;
+    let myName = localStorage.getItem('myName') || "";
     // ---------------- 초기 데이터 로딩 ----------------
     function loadData() {
-      // localStorage 우선 → 없으면 schedule.json fetch
       if(localStorage.getItem('schedule')) {
         schedule = JSON.parse(localStorage.getItem('schedule'));
         loadedFromJSON = false;
@@ -184,7 +199,7 @@
       fetch('schedule.json')
         .then(r=>r.ok?r.json():[])
         .then(json=>{
-          schedule = json;
+          schedule = json.map((row,i)=>({...row, id:row.id||Date.now()+i}));
           loadedFromJSON = true;
           saveData();
           renderCards();
@@ -232,6 +247,17 @@
       }
       document.getElementById('weekdayFilter').innerHTML = wdHtml;
     }
+    // ---------------- 마이페이지 ----------------
+    function toggleMyPage() {
+      if(!myName) {
+        myName = prompt("마이페이지: 내 이름을 입력하세요 (예: 김민지)");
+        if(!myName) return;
+        localStorage.setItem('myName', myName);
+      }
+      mypage = !mypage;
+      document.getElementById('mypageBtn').classList.toggle('active',mypage);
+      renderCards();
+    }
     // ---------------- 검색/필터/정렬 ----------------
     function getFilteredSchedule() {
       let arr = schedule.slice();
@@ -242,6 +268,8 @@
       arr = arr.filter(row=>row.date>=from && row.date<=to);
       // 요일 필터
       if(filterWeekday!=="") arr = arr.filter(row=>(new Date(row.date).getDay()==filterWeekday));
+      // 마이페이지
+      if(mypage && myName) arr = arr.filter(row=>row.name==myName);
       // 검색
       let q = document.getElementById('search').value.trim();
       if(q) arr = arr.filter(row=>
@@ -272,46 +300,41 @@
         }
         // 카드
         let card = document.createElement('div');
-        card.className = 'card'+(holidays2025[row.date]?' holiday':'')+(row.attendance===false?' gray':'');
+        card.className = 'card'+(holidays2025[row.date]?' holiday':'')+(row.attended?'':' completed');
         let color = memberColors[row.name]||'var(--default)';
         card.innerHTML = `
           <div class="colorbar" style="background:${color}"></div>
-          <div class="card-row">
-            <span class="name">${row.name||''}</span>
-            <span class="date">${row.date||''}</span>
-          </div>
-          <div class="place">${row.place||''}</div>
-          <div class="card-row" style="gap:1.2em;">
-            <label><input type="checkbox" ${row.attendance!==false?'checked':''} onchange="toggleAttendance('${row.id}')"> 출근 여부</label>
-            <label>DB 수 <input type="number" min="0" value="${row.db||''}" placeholder="DB 수 입력" onchange="changeDB('${row.id}',this.value)"></label>
-          </div>
-          <div class="card-row" style="margin-bottom:0.3em;">
-            <textarea placeholder="메모 입력" oninput="changeMemo('${row.id}',this.value)">${row.memo||''}</textarea>
-          </div>
+          <h3>${row.name||''}</h3>
+          <p class="date">${row.date||''}</p>
+          <p class="place">${row.place||''} <span class="type-tag">${row.type||''}</span></p>
+          <label><input type="checkbox" ${row.attended?'checked':''} onchange="toggleAttendance('${row.name}','${row.date}')"> 출근 여부</label>
+          <label>DB 수 <input type="number" min="0" value="${row.dbCount||''}" placeholder="DB 수 입력" onchange="changeDB('${row.name}','${row.date}',this.value)"></label>
+          <textarea placeholder="메모 입력" oninput="changeMemo('${row.name}','${row.date}',this.value)">${row.memo||''}</textarea>
+          <div style="font-size:0.8em;color:#888;margin-top:0.2em;">${row.lastModified||''}</div>
         `;
         box.appendChild(card);
       });
     }
     // ---------------- 출근/DB/메모 인터랙션 ----------------
-    function toggleAttendance(id) {
-      let idx = schedule.findIndex(row=>row.id==id);
+    function toggleAttendance(name,date) {
+      let idx = schedule.findIndex(row=>row.name==name&&row.date==date);
       if(idx<0) return;
-      schedule[idx].attendance = schedule[idx].attendance===false?true:false;
-      schedule[idx].lastModified = Date.now();
+      schedule[idx].attended = !schedule[idx].attended;
+      schedule[idx].lastModified = new Date().toLocaleString();
       saveData(); renderCards();
     }
-    function changeDB(id,val) {
-      let idx = schedule.findIndex(row=>row.id==id);
+    function changeDB(name,date,val) {
+      let idx = schedule.findIndex(row=>row.name==name&&row.date==date);
       if(idx<0) return;
-      schedule[idx].db = Number(val)||"";
-      schedule[idx].lastModified = Date.now();
+      schedule[idx].dbCount = Number(val)||"";
+      schedule[idx].lastModified = new Date().toLocaleString();
       saveData();
     }
-    function changeMemo(id,val) {
-      let idx = schedule.findIndex(row=>row.id==id);
+    function changeMemo(name,date,val) {
+      let idx = schedule.findIndex(row=>row.name==name&&row.date==date);
       if(idx<0) return;
       schedule[idx].memo = val;
-      schedule[idx].lastModified = Date.now();
+      schedule[idx].lastModified = new Date().toLocaleString();
       saveData();
     }
     // ---------------- 요약 보기 ----------------
