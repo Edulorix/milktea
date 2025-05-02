@@ -116,6 +116,8 @@
 
   <script>
     const table = document.querySelector("#scheduleTable tbody");
+    const scheduleKey = "milkteaScheduleData";
+
     function saveSchedule() {
       const name = document.getElementById("member").value;
       const date = document.getElementById("date").value;
@@ -123,24 +125,43 @@
       const category = document.getElementById("category").value;
       const note = document.getElementById("note").value;
 
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${name}</td>
-        <td>${date}</td>
-        <td>${location}</td>
-        <td data-type="${category}">${category}</td>
-        <td>${note}</td>
-      `;
-      table.appendChild(row);
+      const entry = { name, date, location, category, note };
+      const savedData = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
+      savedData.push(entry);
+      localStorage.setItem(scheduleKey, JSON.stringify(savedData));
+      appendToTable(entry);
       clearForm();
     }
+
+    function appendToTable(entry) {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${entry.name}</td>
+        <td>${entry.date}</td>
+        <td>${entry.location}</td>
+        <td data-type="${entry.category}">${entry.category}</td>
+        <td>${entry.note}</td>
+      `;
+      table.appendChild(row);
+    }
+
     function clearForm() {
       document.getElementById("member").value = "";
-      document.getElementById("date").value = "";
+      document.getElementById("date").value = new Date().toISOString().split('T')[0];
       document.getElementById("location").value = "";
       document.getElementById("category").value = "유치원";
       document.getElementById("note").value = "";
     }
+
+    function loadSavedSchedules() {
+      const savedData = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
+      savedData.forEach(entry => appendToTable(entry));
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("date").value = new Date().toISOString().split('T')[0];
+      loadSavedSchedules();
+    });
   </script>
 </body>
 </html>
