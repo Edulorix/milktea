@@ -90,10 +90,14 @@
     <div class="form-group">
       <label for="category">유형</label>
       <select id="category">
-        <option value="유치원">유치원</option>
+        <option value="서점">서점</option>
+        <option value="실내">실내</option>
+        <option value="유치원/어린이집">유치원/어린이집</option>
         <option value="초등학교">초등학교</option>
         <option value="행사">행사</option>
+        <option value="박람회">박람회</option>
         <option value="휴무">휴무</option>
+        <option value="기타">기타</option>
       </select>
     </div>
     <div class="form-group">
@@ -114,8 +118,12 @@
     <tbody></tbody>
   </table>
 
+  <h3>> 유형별 요약</h3>
+  <div id="summaryContainer"></div>
+
   <script>
     const table = document.querySelector("#scheduleTable tbody");
+    const summaryContainer = document.getElementById("summaryContainer");
     const scheduleKey = "milkteaScheduleData";
 
     function saveSchedule() {
@@ -130,6 +138,7 @@
       savedData.push(entry);
       localStorage.setItem(scheduleKey, JSON.stringify(savedData));
       appendToTable(entry);
+      updateSummary();
       clearForm();
     }
 
@@ -149,13 +158,27 @@
       document.getElementById("member").value = "";
       document.getElementById("date").value = new Date().toISOString().split('T')[0];
       document.getElementById("location").value = "";
-      document.getElementById("category").value = "유치원";
+      document.getElementById("category").value = "서점";
       document.getElementById("note").value = "";
     }
 
     function loadSavedSchedules() {
       const savedData = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
       savedData.forEach(entry => appendToTable(entry));
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const savedData = JSON.parse(localStorage.getItem(scheduleKey) || "[]");
+      const summary = {};
+
+      savedData.forEach(entry => {
+        summary[entry.category] = (summary[entry.category] || 0) + 1;
+      });
+
+      summaryContainer.innerHTML = Object.entries(summary).map(
+        ([category, count]) => `<p><strong>${category}</strong>: ${count}회</p>`
+      ).join("");
     }
 
     document.addEventListener("DOMContentLoaded", () => {
