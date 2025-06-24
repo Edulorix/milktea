@@ -1,138 +1,109 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8">
-<title>HTML 카드뉴스 생성기</title>
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width">
+<title>📌超级卡片뉴스 생성기 v3</title>
 <style>
-   body {
-     font-family: 'Noto Sans KR', sans-serif;
-     background: #f7f7f7;
-     margin: 0;
-     padding: 20px;
-   }
-   .editor-container {
-     max-width: 1200px;
-     margin: auto;
-     display: flex;
-     flex-wrap: wrap;
-     gap: 20px;
-   }
-   .settings {
-     flex: 1;
-     min-width: 300px;
-     background: white;
-     border-radius: 10px;
-     padding: 20px;
-     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-   }
-   .preview {
-     flex: 1;
-     min-width: 300px;
-     background: white;
-     border-radius: 10px;
-     padding: 20px;
-     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-   }
-   label {
-     font-weight: bold;
-     display: block;
-     margin: 10px 0 5px;
-   }
-   input[type="text"],
-   textarea,
-   select {
-     width: 100%;
-     padding: 10px;
-     border-radius: 6px;
-     border: 1px solid #ccc;
-     margin-bottom: 10px;
-   }
-   .controls {
-     display: flex;
-     justify-content: space-between;
-     margin-top: 20px;
-   }
-   button {
-     padding: 10px 20px;
-     border: none;
-     border-radius: 8px;
-     cursor: pointer;
-     font-weight: bold;
-   }
-   button.preview-btn {
-     background-color: #6366f1;
-     color: white;
-   }
-   button.download-btn {
-     background-color: #f43f5e;
-     color: white;
-   }
+ body{font-family:Arial,sans-serif;background:#f9f9f9;padding:20px;}
+ .wrapper{display:flex;gap:20px;flex-wrap:wrap;}
+ .editor, .preview{background:white;padding:20px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);flex:1;min-width:300px;}
+ label{font-weight:bold;margin-top:10px;display:block;}
+ input[type=text], select{width:100%;padding:8px;margin:5px 0;border:1px solid #ccc;border-radius:6px;}
+ .color-pick{padding:4px;}
+ button{padding:8px 12px;margin-right:5px;border:none;border-radius:6px;cursor:pointer;background:#3b82f6;color:white;}
+ .emojis span, .graphs button{margin:4px;cursor:pointer;}
 </style>
 </head>
 <body>
-<h2>🎨 HTML 카드뉴스 생성기</h2>
-<div class="editor-container">
-<div class="settings">
-<label>배너 색상</label>
-<input type="color" id="bannerColor" value="#9f1239">
-<label>제목</label>
-<input type="text" id="titleInput" placeholder="제목을 입력하세요">
-<label>본문 내용</label>
-<textarea id="bodyInput" rows="6" placeholder="HTML 태그를 써도 됩니다. 글자 색, 크기, 정렬 등을 마음껏 설정하세요!"></textarea>
-<label>글자 폰트</label>
-<select id="fontFamily">
-<option value="'Noto Sans KR', sans-serif">Noto Sans KR</option>
-<option value="Arial">Arial</option>
-<option value="'Courier New'">Courier New</option>
-<option value="Nanum Gothic">나눔고딕</option>
-<option value="Pretendard">프리텐다드</option>
-</select>
-<label>글자 크기 (px)</label>
-<input type="number" id="fontSize" value="16">
-<label>정렬</label>
-<select id="textAlign">
-<option value="left">왼쪽 정렬</option>
-<option value="center">가운데 정렬</option>
-<option value="right">오른쪽 정렬</option>
-</select>
-<label>글자 색상</label>
-<input type="color" id="fontColor" value="#000000">
-<div class="controls">
-<button class="preview-btn" onclick="updatePreview()">미리보기</button>
-<button class="download-btn" onclick="downloadHTML()">다운로드</button>
+<h2>🎯 v3 커스터 카드뉴스 생성기</h2>
+<div class="wrapper">
+<div class="editor">
+<label>배너 배경색</label><input type="color" id="bannerColor" class="color-pick" value="#3b82f6">
+<label>제목 설정</label>
+<input type="text" id="titleText" placeholder="제목 입력"/>
+<label>제목 폰트 크기(px)</label><input type="number" id="titleSize" value="20"/>
+<label>제목 정렬</label><select id="titleAlign"><option>left</option><option selected>center</option><option>right</option></select>
+<label>제목 텍스트 색상</label><input type="color" id="titleColor" class="color-pick" value="#ffffff">
+<label>본문 설정 (인라인 편집 가능)</label>
+<div id="bodyArea" contenteditable="true" style="border:1px solid #ccc;padding:10px;border-radius:6px;min-height:100px;font-size:14px;color:#333">
+     안녕하세요! 여기에 본문을 입력하세요.
+</div>
+<div style="margin-top:8px;"><label>본문 폰트 크기(px)</label>
+<input type="number" id="bodySize" value="14" style="width:80px;display:inline-block"/>
+<label style="margin-left:10px">본문 색</label>
+<input type="color" id="bodyColor" class="color-pick" value="#333333">
+</div>
+<div style="margin-top:8px;"><label>본문 정렬</label>
+<select id="bodyAlign"><option>left</option><option selected>center</option><option>right</option></select>
+</div>
+<div class="emojis">
+<label>이모지 삽입</label>
+<span onclick="insertEmoji('✅')">✅</span>
+<span onclick="insertEmoji('❗')">❗</span>
+<span onclick="insertEmoji('🎯')">🎯</span>
+<span onclick="insertEmoji('💡')">💡</span>
+</div>
+<div class="graphs">
+<label>그래프 삽입</label>
+<button onclick="insertBarGraph()">막대그래프</button>
+<button onclick="insertPieGraph()">원형그래프</button>
+</div>
+<div style="margin-top:12px;">
+<button onclick="render()">미리보기</button>
+<button onclick="copyHTML()">HTML 복사</button>
+<button onclick="downloadHTML()">HTML 다운로드</button>
 </div>
 </div>
 <div class="preview">
-<h3>✨ 실시간 미리보기</h3>
-<iframe id="previewFrame" style="width:100%; height:500px; border:1px solid #ddd;"></iframe>
+<h3>📮 카드뉴스 미리보기</h3>
+<iframe id="iframe" style="width:100%;height:500px;border:1px solid #ddd;"></iframe>
 </div>
 </div>
 <script>
-   function updatePreview() {
-     const bannerColor = document.getElementById("bannerColor").value;
-     const title = document.getElementById("titleInput").value;
-     const body = document.getElementById("bodyInput").value;
-     const font = document.getElementById("fontFamily").value;
-     const fontSize = document.getElementById("fontSize").value + "px";
-     const textAlign = document.getElementById("textAlign").value;
-     const fontColor = document.getElementById("fontColor").value;
-     const content = `
-<div style="font-family:${font}; color:${fontColor}; padding:20px;">
-<div style="background:${bannerColor}; color:white; font-size:22px; font-weight:bold; text-align:center; padding:10px; border-radius:8px;">${title}</div>
-<div style="margin-top:20px; font-size:${fontSize}; text-align:${textAlign};">${body}</div>
+ function insertEmoji(e){ document.execCommand('insertText', false, e); }
+ function insertBarGraph(){
+   let pct = prompt('진도율 입력(%)', '50');
+   if(!pct) return;
+   let bar = `<table width="100%" cellpadding="0"><tr><td style="background:#eee;border-radius:5px;padding:2px"><div style="width:${pct}%;background:#10b981;color:#fff;text-align:center;border-radius:5px">${pct}%</div></td></tr></table><br/>`;
+   document.execCommand('insertHTML', false, bar);
+ }
+ function insertPieGraph(){
+   let pct = prompt('퍼센트 입력(%)', '75');
+   if(!pct) return;
+   let arc = pct*3.6;
+   let pie = `<div style="width:80px;height:80px;border-radius:50%;background:conic-gradient(#f59e0b ${arc}deg, #eee 0);display:inline-block;text-align:center;line-height:80px;font-weight:bold">${pct}%</div><br/>`;
+   document.execCommand('insertHTML', false, pie);
+ }
+ function render(){
+   const bc=document.getElementById('bannerColor').value,
+         t=document.getElementById('titleText').value,
+         ts=document.getElementById('titleSize').value+'px',
+         ta=document.getElementById('titleAlign').value,
+         tc=document.getElementById('titleColor').value,
+         body=document.getElementById('bodyArea').innerHTML,
+         bs=document.getElementById('bodySize').value+'px',
+         ba=document.getElementById('bodyAlign').value,
+         bc2=document.getElementById('bodyColor').value;
+   const html = `
+<div style="font-family:Arial,sans-serif;background:white;padding:20px;border-radius:10px;text-align:center;">
+<div style="background:${bc};color:${tc};font-size:${ts};text-align:${ta};padding:12px;border-radius:8px">${t}</div>
+<div style="padding:20px;text-align:${ba};font-size:${bs};color:${bc2}">${body}</div>
 </div>
-     `;
-     const iframe = document.getElementById("previewFrame");
-     iframe.contentDocument.body.innerHTML = content;
-   }
-   function downloadHTML() {
-     const html = document.getElementById("previewFrame").contentDocument.documentElement.outerHTML;
-     const blob = new Blob([html], { type: "text/html" });
-     const a = document.createElement("a");
-     a.href = URL.createObjectURL(blob);
-     a.download = "cardnews.html";
-     a.click();
-   }
+   `;
+   const doc = document.getElementById('iframe').contentDocument;
+   doc.open();doc.write(html);doc.close();
+   window.renderedHTML = html;
+ }
+ function copyHTML(){
+   navigator.clipboard.writeText(window.renderedHTML || '');
+   alert('복사했어요! 메일 본문에 붙여넣기 하면 돼요 😊');
+ }
+ function downloadHTML(){
+   const blob=new Blob([window.renderedHTML || ''],{type:'text/html'});
+   const a=document.createElement('a');
+   a.href=URL.createObjectURL(blob);
+   a.download='cardnews.html';
+   a.click();
+ }
 </script>
 </body>
 </html>
