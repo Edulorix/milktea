@@ -1,153 +1,80 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📅 밀크티 팀 스케쥴</title>
-  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f2f8ff;
-    }
-    #calendar {
-      max-width: 900px;
-      margin: 50px auto;
-      padding: 0 10px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
-    .controls {
-      text-align: center;
-      margin-top: 1rem;
-    }
-    select {
-      padding: 0.5rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    #vacationSummary {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 1rem;
-      font-size: 0.95rem;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-content {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 20px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-    .modal-content h3 {
-      margin-top: 0;
-      color: #007acc;
-    }
-    .modal-content input, .modal-content select {
-      width: 90%;
-      margin: 0.5rem 0;
-      padding: 0.5rem;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-    }
-    .modal-content button {
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      border: none;
-      background-color: #007acc;
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .modal-content button:hover {
-      background-color: #005f99;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>📮 카드뉴스 메일템플릿 생성기</title>
+<!-- 구글 폰트 SUIT 불러오기 -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=SUIT:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+   body { font-family: 'SUIT', sans-serif; background:#f5f5f5; padding:16px; margin:0; }
+   h1 { text-align:center; color:#333; margin-bottom:24px; }
+   .flex { display:flex; gap:20px; }
+   .controls { flex:1; max-width:360px; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+   .preview { flex:2; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); overflow:auto; max-height:80vh; }
+   input, textarea, select { width:100%; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:14px; }
+   button { width:100%; padding:12px; background:#3366ff; color:#fff; border:none; border-radius:6px; font-size:16px; cursor:pointer; }
+   button:hover { background:#254eda; }
+   .card { border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.1); margin-bottom:20px; overflow:hidden; }
+   .header { padding:16px; color:#fff; font-size:20px; font-weight:700; }
+   .body { padding:16px; font-size:14px; line-height:1.5; color:#333; }
+   .btn { display:inline-block; margin:10px 0; padding:10px 16px; background:#3366ff; color:#fff; text-decoration:none; border-radius:6px; }
+   img { max-width:100%; border-radius:6px; margin:10px 0; }
+</style>
 </head>
 <body>
-  <h2 style="text-align:center; color:#007acc; margin-top:1rem;">📅 밀크티 팀 스케쥴</h2>
-  <div class="controls">
-    <label for="memberFilter">🔍 팀원 필터:</label>
-    <select id="memberFilter" onchange="filterEvents()">
-      <option value="">전체</option>
-      <option value="김민지(T)">김민지(T)</option>
-      <option value="함주현">함주현</option>
-      <option value="우인옥">우인옥</option>
-      <option value="김민정">김민정</option>
-      <option value="최형심">최형심</option>
-      <option value="조인자(T)">조인자(T)</option>
-      <option value="윤진숙">윤진숙</option>
-      <option value="김미경">김미경</option>
-    </select>
-  </div>
-  <div id='calendar'></div>
-  <div id="vacationSummary"></div>
-
-  <div class="modal" id="inputModal">
-    <div class="modal-content">
-      <h3>📌 일정 추가/수정</h3>
-      <input type="text" id="modalName" placeholder="이름 입력 (예: 민지)">
-      <input type="text" id="modalPlace" placeholder="방문 장소 입력">
-      <select id="modalType">
-        <option value="">유형 선택</option>
-        <option value="서점">서점</option>
-        <option value="유치원/어린이집">유치원/어린이집</option>
-        <option value="초등학교">초등학교</option>
-        <option value="행사">행사</option>
-        <option value="박람회">박람회</option>
-        <option value="휴무">휴무</option>
-        <option value="기타">기타</option>
-      </select>
-      <button onclick="saveModalData()">저장</button>
-    </div>
-  </div>
-
-  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
-  <script>
-    const modal = document.getElementById("inputModal");
-    const nameInput = document.getElementById("modalName");
-    const placeInput = document.getElementById("modalPlace");
-    const typeSelect = document.getElementById("modalType");
-    let selectedDate;
-
-    document.addEventListener('DOMContentLoaded', function() {
-      const calendarEl = document.getElementById('calendar');
-      const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        locale: 'ko',
-        dateClick: function(info) {
-          selectedDate = info.dateStr;
-          modal.style.display = 'flex';
-        }
-      });
-      calendar.render();
-    });
-
-    function saveModalData() {
-      const name = nameInput.value;
-      const place = placeInput.value;
-      const type = typeSelect.value;
-      alert(`${selectedDate} 일정 저장됨: ${name} - ${place} (${type})`);
-      modal.style.display = 'none';
-    }
-  </script>
+<h1>📮 카드뉴스 HTML 생성기</h1>
+<div class="flex">
+<div class="controls">
+<label>팀 톤 선택</label>
+<select id="theme">
+<option value="red">Red팀</option>
+<option value="purple">Purple팀</option>
+</select>
+<label>제목</label><input id="title" placeholder="제목 입력..." />
+<label>본문 (Markdown 지원)</label>
+<textarea id="body" rows="6" placeholder="본문 입력..."></textarea>
+<label>이미지 URL (선택)</label><input id="imgurl" placeholder="https://..."/>
+<label>버튼 텍스트 (선택)</label><input id="btn_text" placeholder="자세히 보기"/>
+<label>버튼 URL (선택)</label><input id="btn_url" placeholder="https://..."/>
+<button onclick="generate()">HTML 생성하기</button>
+<label>생성된 HTML 코드</label>
+<textarea id="output" rows="10" readonly></textarea>
+</div>
+<div class="preview">
+<div id="cardPreview">미리보기가 여기에 나옵니다.</div>
+</div>
+</div>
+<script>
+   function mdToHTML(md) {
+     return md.replace(/^### (.*$)/gm, '<h3>$1</h3>')
+              .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+              .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+              .replace(/\*(.*?)\*/g, '<em>$1</em>')
+              .replace(/\n/g, '<br>');
+   }
+   function generate() {
+     let theme = document.getElementById('theme').value;
+     let title = document.getElementById('title').value;
+     let body = document.getElementById('body').value;
+     let imgurl = document.getElementById('imgurl').value;
+     let btnText = document.getElementById('btn_text').value;
+     let btnUrl = document.getElementById('btn_url').value;
+     let color = theme === 'red' ? '#c62828' : '#6A1B9A';
+     let html = `
+<div class="card">
+<div class="header" style="background:${color}">${title}</div>
+<div class="body">
+   ${mdToHTML(body)}
+   ${imgurl ? `<img src="${imgurl}" alt="" />` : ''}
+   ${btnText && btnUrl ? `<a class="btn" href="${btnUrl}" style="background:${color}">${btnText}</a>` : ''}
+</div>
+</div>`;
+     document.getElementById('output').value = html.trim();
+     document.getElementById('cardPreview').innerHTML = html;
+   }
+</script>
 </body>
 </html>
