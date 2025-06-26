@@ -1,109 +1,29 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width">
-<title>📌超级卡片뉴스 생성기 v3</title>
-<style>
- body{font-family:Arial,sans-serif;background:#f9f9f9;padding:20px;}
- .wrapper{display:flex;gap:20px;flex-wrap:wrap;}
- .editor, .preview{background:white;padding:20px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);flex:1;min-width:300px;}
- label{font-weight:bold;margin-top:10px;display:block;}
- input[type=text], select{width:100%;padding:8px;margin:5px 0;border:1px solid #ccc;border-radius:6px;}
- .color-pick{padding:4px;}
- button{padding:8px 12px;margin-right:5px;border:none;border-radius:6px;cursor:pointer;background:#3b82f6;color:white;}
- .emojis span, .graphs button{margin:4px;cursor:pointer;}
-</style>
-</head>
-<body>
-<h2>🎯 v3 커스터 카드뉴스 생성기</h2>
-<div class="wrapper">
-<div class="editor">
-<label>배너 배경색</label><input type="color" id="bannerColor" class="color-pick" value="#3b82f6">
-<label>제목 설정</label>
-<input type="text" id="titleText" placeholder="제목 입력"/>
-<label>제목 폰트 크기(px)</label><input type="number" id="titleSize" value="20"/>
-<label>제목 정렬</label><select id="titleAlign"><option>left</option><option selected>center</option><option>right</option></select>
-<label>제목 텍스트 색상</label><input type="color" id="titleColor" class="color-pick" value="#ffffff">
-<label>본문 설정 (인라인 편집 가능)</label>
-<div id="bodyArea" contenteditable="true" style="border:1px solid #ccc;padding:10px;border-radius:6px;min-height:100px;font-size:14px;color:#333">
-     안녕하세요! 여기에 본문을 입력하세요.
-</div>
-<div style="margin-top:8px;"><label>본문 폰트 크기(px)</label>
-<input type="number" id="bodySize" value="14" style="width:80px;display:inline-block"/>
-<label style="margin-left:10px">본문 색</label>
-<input type="color" id="bodyColor" class="color-pick" value="#333333">
-</div>
-<div style="margin-top:8px;"><label>본문 정렬</label>
-<select id="bodyAlign"><option>left</option><option selected>center</option><option>right</option></select>
-</div>
-<div class="emojis">
-<label>이모지 삽입</label>
-<span onclick="insertEmoji('✅')">✅</span>
-<span onclick="insertEmoji('❗')">❗</span>
-<span onclick="insertEmoji('🎯')">🎯</span>
-<span onclick="insertEmoji('💡')">💡</span>
-</div>
-<div class="graphs">
-<label>그래프 삽입</label>
-<button onclick="insertBarGraph()">막대그래프</button>
-<button onclick="insertPieGraph()">원형그래프</button>
-</div>
-<div style="margin-top:12px;">
-<button onclick="render()">미리보기</button>
-<button onclick="copyHTML()">HTML 복사</button>
-<button onclick="downloadHTML()">HTML 다운로드</button>
-</div>
-</div>
-<div class="preview">
-<h3>📮 카드뉴스 미리보기</h3>
-<iframe id="iframe" style="width:100%;height:500px;border:1px solid #ddd;"></iframe>
-</div>
-</div>
-<script>
- function insertEmoji(e){ document.execCommand('insertText', false, e); }
- function insertBarGraph(){
-   let pct = prompt('진도율 입력(%)', '50');
-   if(!pct) return;
-   let bar = `<table width="100%" cellpadding="0"><tr><td style="background:#eee;border-radius:5px;padding:2px"><div style="width:${pct}%;background:#10b981;color:#fff;text-align:center;border-radius:5px">${pct}%</div></td></tr></table><br/>`;
-   document.execCommand('insertHTML', false, bar);
- }
- function insertPieGraph(){
-   let pct = prompt('퍼센트 입력(%)', '75');
-   if(!pct) return;
-   let arc = pct*3.6;
-   let pie = `<div style="width:80px;height:80px;border-radius:50%;background:conic-gradient(#f59e0b ${arc}deg, #eee 0);display:inline-block;text-align:center;line-height:80px;font-weight:bold">${pct}%</div><br/>`;
-   document.execCommand('insertHTML', false, pie);
- }
- function render(){
-   const bc=document.getElementById('bannerColor').value,
-         t=document.getElementById('titleText').value,
-         ts=document.getElementById('titleSize').value+'px',
-         ta=document.getElementById('titleAlign').value,
-         tc=document.getElementById('titleColor').value,
-         body=document.getElementById('bodyArea').innerHTML,
-         bs=document.getElementById('bodySize').value+'px',
-         ba=document.getElementById('bodyAlign').value,
-         bc2=document.getElementById('bodyColor').value;
-   const html = `
-<div style="font-family:Arial,sans-serif;background:white;padding:20px;border-radius:10px;text-align:center;">
-<div style="background:${bc};color:${tc};font-size:${ts};text-align:${ta};padding:12px;border-radius:8px">${t}</div>
-<div style="padding:20px;text-align:${ba};font-size:${bs};color:${bc2}">${body}</div>
-</div>
-   `;
-   const doc = document.getElementById('iframe').contentDocument;
-   doc.open();doc.write(html);doc.close();
-   window.renderedHTML = html;
- }
- function copyHTML(){
-   navigator.clipboard.writeText(window.renderedHTML || '');
-   alert('복사했어요! 메일 본문에 붙여넣기 하면 돼요 😊');
- }
- function downloadHTML(){
-   const blob=new Blob([window.renderedHTML || ''],{type:'text/html'});
-   const a=document.createElement('a');
-   a.href=URL.createObjectURL(blob);
-   a.download='cardnews.html';
-   a.click();
- }
-</script>
-</body>
-</html>
+<table width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial, sans-serif; background:#fefefe; padding:20px;">
+<tr>
+<td align="center">
+<table width="600" style="border:1px solid #eee; border-radius:8px; padding:20px; background-color:#ffffff;">
+<tr>
+<td align="center" style="background-color:#e11d48; color:white; font-size:20px; font-weight:bold; padding:16px; border-radius:6px;">
+           [Red팀] 사전 온라인 교육 이수 안내
+</td>
+</tr>
+<tr>
+<td style="padding:20px; font-size:14px; color:#333333; line-height:1.6; text-align:left;">
+           ✅ 아래 명단은 Dreamhack 플랫폼 기준, 사전 온라인 과정 80% 이상 이수 인원입니다.<br><br>
+           👉 본인 정보를 확인하시고, 플랫폼에서도 학습 진도율을 꼭 점검해주세요.<br>
+<br>
+           💡 진도율 확인: <a href="https://dreamhack.io/euser/mypage" target="_blank">https://dreamhack.io/euser/mypage</a>
+</td>
+</tr>
+<tr>
+<td align="center" style="padding:10px;">
+<a href="https://dreamhack.io/euser/mypage"
+             style="display:inline-block; background-color:#3b82f6; color:white; padding:10px 20px; text-decoration:none; border-radius:6px; font-weight:bold;">
+             진도율 확인하기
+</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
