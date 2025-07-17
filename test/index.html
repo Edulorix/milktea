@@ -1,100 +1,133 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>Dreamhack 이수자 명단 생성기</title>
+  <meta charset="UTF-8">
+  <title>Purple팀 이수자 명단 생성기</title>
   <style>
     body {
       font-family: '맑은 고딕', sans-serif;
-      margin: 40px;
-      background: #f9f9f9;
+      background-color: #f9f9f9;
+      padding: 40px;
       color: #333;
     }
     h1 {
       color: #6A1B9A;
     }
-    input[type="file"] {
-      margin-bottom: 20px;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 20px;
+    button {
+      margin-top: 16px;
+      padding: 10px 20px;
       font-size: 14px;
-      font-family: '맑은 고딕', sans-serif;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: center;
-    }
-    th {
       background-color: #6A1B9A;
       color: white;
-    }
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
+      border: none;
+      cursor: pointer;
     }
     textarea {
       width: 100%;
-      height: 300px;
-      margin-top: 20px;
+      height: 400px;
+      margin-top: 24px;
       font-family: 'Courier New', monospace;
+    }
+    input[type="file"] {
+      margin-top: 12px;
     }
   </style>
 </head>
 <body>
-  <h1>💡 Dreamhack 이수자 명단 HTML 생성기</h1>
-  <p>CSV 파일을 업로드하면 자동으로 HTML 코드가 생성돼요.</p>
-
-  <input type="file" id="csvFile" accept=".csv" />
-  <div id="table-container"></div>
-  <textarea id="htmlOutput" placeholder="HTML 코드가 여기에 표시됩니다"></textarea>
+  <h1>💜 Purple팀 - 이수자 명단 메일 HTML 생성기</h1>
+  <p>CSV 파일을 업로드하면, 아래에 복붙 가능한 메일 HTML이 생성돼요. <br/>완료 후 <strong>HTML 저장</strong>도 가능해요.</p>
+  <input type="file" id="csvFile" accept=".csv">
+  <br />
+  <button onclick="downloadHTML()">📥 HTML 저장하기</button>
+  <textarea id="htmlOutput" placeholder="HTML 코드가 여기에 생성됩니다"></textarea>
 
   <script>
-    document.getElementById("csvFile").addEventListener("change", function (e) {
+    document.getElementById('csvFile').addEventListener('change', function (e) {
       const reader = new FileReader();
       reader.onload = function (event) {
-        const text = event.target.result.trim();
-        const lines = text.split("\n").map(line => line.trim());
-        const headers = lines[0].split(",").map(h => h.trim());
-        const rows = lines.slice(1).map(line => line.split(",").map(cell => cell.trim()));
+        const lines = event.target.result.trim().split('\n');
+        const headers = lines[0].split(',').map(h => h.trim());
+        const rows = lines.slice(1).map(line => line.split(',').map(cell => cell.trim()));
 
-        // HTML 테이블 생성
-        let tableHtml = `<table><thead><tr><th>No</th>`;
-        headers.forEach(h => {
-          tableHtml += `<th>${h}</th>`;
-        });
-        tableHtml += `</tr></thead><tbody>`;
+        let tableRows = '';
         rows.forEach((row, i) => {
           const bg = i % 2 === 1 ? ' style="background-color:#f9f9f9;"' : '';
-          tableHtml += `<tr${bg}><td>${i + 1}</td>`;
+          tableRows += `<tr${bg}><td style="border:1px solid #ccc; padding:10px;">${i + 1}</td>`;
           row.forEach(cell => {
-            tableHtml += `<td>${cell}</td>`;
+            tableRows += `<td style="border:1px solid #ccc; padding:10px;">${cell}</td>`;
           });
-          tableHtml += `</tr>`;
+          tableRows += '</tr>';
         });
-        tableHtml += `</tbody></table>`;
 
-        document.getElementById("table-container").innerHTML = tableHtml;
+        const fullHTML = `
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"></head>
+<body style="margin:0; padding:0; font-family:'맑은 고딕', sans-serif; background-color:#ffffff;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;">
+    <tr>
+      <td align="left" style="padding:20px;">
+        <table width="960" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff; border:1px solid #dddddd;">
+          <tr>
+            <td style="padding:40px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="text-align:center; font-size:24px; color:#6A1B9A; font-weight:bold;">Purple팀 - 사전 온라인 과정 80% 이수자 명단</td>
+                </tr>
+                <tr>
+                  <td style="text-align:center; font-size:15px; color:#555; padding-top:16px; padding-bottom:32px;">
+                    아래 명단은 Dreamhack 사전 온라인 과정 세 과목 평균 80% 이상 이수자 명단입니다.<br/>
+                    본인 정보를 확인하시고, 플랫폼에서도 진도율을 꼭 점검해주시기 바랍니다.
+                  </td>
+                </tr>
+              </table>
 
-        const htmlCode = `
-<!-- 붙여넣을 메일용 HTML -->
-<h3 style="text-align:center; color:#6A1B9A; font-family:'맑은 고딕', sans-serif;">Purple팀 - 사전 온라인 과정 80% 이수자 명단</h3>
-<p style="text-align:center; font-family:'맑은 고딕', sans-serif;">
-  Dreamhack 사전 온라인 과정 세 과목 평균 80% 이상 이수자 명단입니다.<br/>
-  본인 정보를 확인하시고, 플랫폼에서도 진도율을 꼭 점검해주시기 바랍니다.
-</p>
-${tableHtml}
-<p style="background:#fefbe8; padding:15px; border-left:5px solid #ffd54f; font-family:'맑은 고딕', sans-serif; line-height:1.8;">
-  💡 <strong>진도율 확인 방법:</strong><br>
-  👉 <a href="https://dreamhack.io/euser/mypage" target="_blank" style="color:#6A1B9A; text-decoration:none; font-weight:bold;">
-  https://dreamhack.io/euser/mypage</a>
-</p>`;
-        document.getElementById("htmlOutput").value = htmlCode;
+              <table width="100%" cellpadding="10" cellspacing="0" border="1" style="border-collapse:collapse; font-size:14px; text-align:center;">
+                <thead>
+                  <tr style="background-color:#6A1B9A; color:white;">
+                    <th style="border:1px solid #ccc; padding:10px;">No</th>
+                    ${headers.map(h => `<th style="border:1px solid #ccc; padding:10px;">${h}</th>`).join('')}
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tableRows}
+                </tbody>
+              </table>
+
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:30px;">
+                <tr>
+                  <td style="font-size:14px; background-color:#fefbe8; padding:15px; border-left:5px solid #ffd54f; line-height:1.9;">
+                    💡 <strong>진도율 확인 방법:</strong><br>
+                    Dreamhack 개인 학습 페이지에서 나의 진도율을 직접 확인할 수 있습니다.<br>
+                    👉 <a href="https://dreamhack.io/euser/mypage" target="_blank" style="color:#6A1B9A; text-decoration:none; font-weight:bold;">https://dreamhack.io/euser/mypage</a>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+        document.getElementById("htmlOutput").value = fullHTML.trim();
       };
       reader.readAsText(e.target.files[0], "UTF-8");
     });
+
+    function downloadHTML() {
+      const content = document.getElementById("htmlOutput").value;
+      const blob = new Blob([content], { type: "text/html;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "Purple팀_이수자_명단.html";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   </script>
 </body>
 </html>
